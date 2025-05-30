@@ -3,6 +3,8 @@ description: "Example for Material 3 Expressive Shape Borders"
 publish_to: "none"
 version: 0.1.0
 
+resolution: workspace
+
 environment:
   sdk: ^3.8.0
 
@@ -11,7 +13,6 @@ dependencies:
     sdk: flutter
   flutter_arc_text: ^0.6.0
   m3e_shapes:
-    path: ../
 
 dev_dependencies:
   flutter_test:

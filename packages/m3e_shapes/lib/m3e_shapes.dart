@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 
 export 'all_shapes.dart';
 export 'stars.dart';

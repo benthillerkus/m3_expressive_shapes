@@ -1,20 +1,8 @@
-name: m3e_shapes
-description: "Implementation of the Material 3 Expressive Shape Tokens as Flutter ShapeBorders"
-version: 0.0.1
-homepage:
-repository: https://github.com/benthillerkus/m3e_shapes
+name: workspace
 
 environment:
-  sdk: ^3.8.0
-  flutter: ">=1.17.0"
+  sdk: '^3.8.0'
 
-dependencies:
-  flutter:
-    sdk: flutter
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^6.0.0
-
-flutter:
+workspace:
+  - packages/m3e_shapes
+  - packages/m3e_shapes/example
