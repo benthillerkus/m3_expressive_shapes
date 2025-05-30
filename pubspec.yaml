@@ -6,3 +6,4 @@ environment:
 workspace:
   - packages/m3e_shapes
   - packages/m3e_shapes/example
+  - packages/androidx_graphics_shapes

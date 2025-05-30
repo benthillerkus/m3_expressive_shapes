@@ -1,0 +1,88 @@
+import 'dart:ui';
+
+import 'package:meta/meta.dart';
+import 'package:meta/meta_meta.dart';
+import 'dart:math';
+import 'point.dart';
+
+/// These epsilon values are used internally to determine when two points are the same, within some
+/// reasonable roundoff error. The distance epsilon is smaller, with the intention that the roundoff
+/// should not be larger than a pixel on any reasonable sized display.
+@internal
+const double distanceEpsilon = 1e-4;
+@internal
+const double angleEpsilon = 1e-6;
+
+/// This epsilon is based on the observation that people tend to see e.g. collinearity much more
+/// relaxed than what is mathematically correct. This effect is heightened on smaller displays. Use
+/// this epsilon for operations that allow higher tolerances.
+@internal
+const double relaxedDistanceEpsilon = 5e-3;
+
+extension Rotate90Ext on Offset {
+  Offset rotate90() => Offset(-dy, dx);
+}
+
+/// Similar to number % mod, but ensures the result is always positive. For example: 4 % 3 =
+/// positiveModulo(4, 3) = 1, but: -4 % 3 = -1 positiveModulo(-4, 3) = 2
+@internal
+num positiveModulo(num number, num mod) => (number % mod + mod) % mod;
+
+/// Returns whether C is on the line defined by the two points AB
+@internal
+bool collinearIsh(
+    double aX,
+    double aY,
+    double bX,
+    double bY,
+    double cX,
+    double cY,
+    {double tolerance = distanceEpsilon}
+) {
+    // The dot product of a perpendicular angle is 0. By rotating one of the vectors,
+    // we save the calculations to convert the dot product to degrees afterwards.
+    var ab = Offset(bX - aX, bY - aY).rotate90();
+    var ac = Offset(cX - aX, cY - aY);
+    var dotProduct = ab.dotProduct(ac).abs();
+    var relativeTolerance = tolerance * ab.distance * ac.distance;
+
+    return dotProduct < tolerance || dotProduct < relativeTolerance;
+}
+
+/// Approximates whether corner at this vertex is concave or convex, based on the relationship of the
+/// prev->curr/curr->next vectors.
+@internal
+bool convex(Offset previous, Offset current, Offset next) {
+    // TODO: b/369320447 - This is a fast, but not reliable calculation.
+    return (current - previous).clockwise(next - current);
+}
+
+/// Does a ternary search in [v0..v1] to find the parameter that minimizes the given function.
+/// Stops when the search space size is reduced below the given tolerance.
+///
+/// NTS: Does it make sense to split the function f in 2, one to generate a candidate, of a custom
+/// type T (i.e. (Float) -> T), and one to evaluate it ( (T) -> Float )?
+@internal
+double findMinimum(
+    double v0,
+    double v1,
+    FindMinimumFunction f,
+    {double tolerance = 1e-3}
+) {
+    var a = v0;
+    var b = v1;
+    while (b - a > tolerance) {
+        var c1 = (2 * a + b) / 3;
+        var c2 = (2 * b + a) / 3;
+        if (f(c1) < f(c2)) {
+            b = c2;
+        } else {
+            a = c1;
+        }
+    }
+    return (a + b) / 2;
+}
+
+/// A functional interface for computing a Float value when finding the minimum at [findMinimum].
+@internal
+typedef FindMinimumFunction = double Function(double value);

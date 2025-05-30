@@ -13,6 +13,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  androidx_graphics_shapes:
 
 dev_dependencies:
   flutter_test:
