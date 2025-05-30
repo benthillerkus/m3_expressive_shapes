@@ -1,7 +1,7 @@
 import 'package:example/list.dart';
 import 'package:example/table.dart';
 import 'package:flutter/material.dart';
-import 'package:m3e_shapes/m3e_shapes.dart';
+import 'package:m3_expressive_shapes/m3e_shapes.dart';
 
 void main() {
   runApp(const MainApp());

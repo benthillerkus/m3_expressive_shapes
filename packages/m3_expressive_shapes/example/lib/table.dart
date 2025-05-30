@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:m3e_shapes/m3e_shapes.dart';
+import 'package:m3_expressive_shapes/m3e_shapes.dart';
 
 class ShapesOverviewScreen extends StatefulWidget {
   const ShapesOverviewScreen({super.key});

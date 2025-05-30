@@ -1,11 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
-import 'package:m3e_shapes/all_shapes.dart';
+import 'package:m3_expressive_shapes/all_shapes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_arc_text/flutter_arc_text.dart';
-import 'package:m3e_shapes/m3e_shapes.dart';
+import 'package:m3_expressive_shapes/m3e_shapes.dart';
 
 class ListShapesScreen extends StatefulWidget {
   const ListShapesScreen({super.key});
