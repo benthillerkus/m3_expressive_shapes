@@ -2,6 +2,7 @@
 // See original license at the end of this file.
 
 import 'package:androidx_graphics_shapes/cubic.dart';
+import 'package:androidx_graphics_shapes/features.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -17,6 +18,7 @@ Matcher cubic2DMoreOrLessEquals(Cubic2D value, {double epsilon = epsilon}) {
   );
 }
 
+/// Lens for [Cubic2D] to focus on its [Cubic2D.anchor0].
 class _HasAnchor0 extends CustomMatcher {
   _HasAnchor0(Matcher matcher)
     : super('Cubic2D with anchor0', 'anchor0', matcher);
@@ -25,6 +27,7 @@ class _HasAnchor0 extends CustomMatcher {
   Object? featureValueOf(dynamic actual) => (actual as Cubic2D).anchor0;
 }
 
+/// Lens for [Cubic2D] to focus on its [Cubic2D.control0].
 class _HasControl0 extends CustomMatcher {
   _HasControl0(Matcher matcher)
     : super('Cubic2D with control0', 'control0', matcher);
@@ -33,6 +36,7 @@ class _HasControl0 extends CustomMatcher {
   Object? featureValueOf(dynamic actual) => (actual as Cubic2D).control0;
 }
 
+/// Lens for [Cubic2D] to focus on its [Cubic2D.control1].
 class _HasControl1 extends CustomMatcher {
   _HasControl1(Matcher matcher)
     : super('Cubic2D with control1', 'control1', matcher);
@@ -41,6 +45,7 @@ class _HasControl1 extends CustomMatcher {
   Object? featureValueOf(dynamic actual) => (actual as Cubic2D).control1;
 }
 
+/// Lens for [Cubic2D] to focus on its [Cubic2D.anchor1].
 class _HasAnchor1 extends CustomMatcher {
   _HasAnchor1(Matcher matcher)
     : super('Cubic2D with anchor1', 'anchor1', matcher);
@@ -49,21 +54,53 @@ class _HasAnchor1 extends CustomMatcher {
   Object? featureValueOf(dynamic actual) => (actual as Cubic2D).anchor1;
 }
 
-// internal fun assertCubicListsEqualish(expected: List<Cubic>, actual: List<Cubic>) {
-//     assertEquals(expected.size, actual.size)
-//     for (i in expected.indices) {
-//         assertCubicsEqualish(expected[i], actual[i])
-//     }
-// }
+Matcher cubic2DListMoreOrLessEquals(
+  List<Cubic2D> expected, {
+  double epsilon = epsilon,
+}) {
+  return allOf(
+    isA<List<Cubic2D>>(),
+    hasLength(expected.length),
+    pairwiseCompare(expected, (a, b) {
+      return cubic2DMoreOrLessEquals(a, epsilon: epsilon).matches(b, {});
+    }, "Cubic2D more or less equals (within $epsilon)"),
+  );
+}
 
-// internal fun assertFeaturesEqualish(expected: Feature, actual: Feature) {
-//     assertCubicListsEqualish(expected.cubics, actual.cubics)
-//     assertEquals(expected::class, actual::class)
+/// Lens for [Feature] to focus on its cubics.
+class _HasCubic2DList extends CustomMatcher {
+  _HasCubic2DList(Matcher matcher)
+    : super('List<Cubic2D> with cubics', 'cubics', matcher);
 
-//     if (expected is Feature.Corner && actual is Feature.Corner) {
-//         assertEquals(expected.convex, actual.convex)
-//     }
-// }
+  @override
+  Object? featureValueOf(dynamic actual) => (actual as Feature).cubics;
+}
+
+class _IfBothAreCornersIsConvexSame extends CustomMatcher {
+  _IfBothAreCornersIsConvexSame(Feature other)
+    : super(
+        'Feature with isConvex',
+        'isConvex',
+        equals(other is Corner ? other.convex : null),
+      );
+
+  @override
+  Object? featureValueOf(dynamic actual) {
+    if (actual is Corner) return actual.convex;
+
+    return null; // Not applicable for non-Corner features.
+  }
+}
+
+Matcher featureMoreOrLessEquals(Feature expected, {double epsilon = epsilon}) {
+  return allOf(
+    isA<Feature>(),
+    _HasCubic2DList(
+      cubic2DListMoreOrLessEquals(expected.cubics, epsilon: epsilon),
+    ),
+    _IfBothAreCornersIsConvexSame(expected),
+  );
+}
 
 // internal fun assertPolygonsEqualish(expected: RoundedPolygon, actual: RoundedPolygon) {
 //     assertCubicListsEqualish(expected.cubics, actual.cubics)
@@ -75,16 +112,14 @@ class _HasAnchor1 extends CustomMatcher {
 // }
 
 class _HasDx extends CustomMatcher {
-  _HasDx(Matcher matcher)
-    : super('Offset with dx', 'dx', matcher);
+  _HasDx(Matcher matcher) : super('Offset with dx', 'dx', matcher);
 
   @override
   Object? featureValueOf(dynamic actual) => (actual as Offset).dx;
 }
 
 class _HasDy extends CustomMatcher {
-  _HasDy(Matcher matcher)
-    : super('Offset with dy', 'dy', matcher);
+  _HasDy(Matcher matcher) : super('Offset with dy', 'dy', matcher);
 
   @override
   Object? featureValueOf(dynamic actual) => (actual as Offset).dy;
@@ -116,18 +151,19 @@ Matcher offsetWithinRect(Rect rect) {
   );
 }
 
-// internal fun assertInBounds(shape: List<Cubic>, minPoint: Point, maxPoint: Point) {
-//     for (cubic in shape) {
-//         assertPointGreaterish(minPoint, Point(cubic.anchor0X, cubic.anchor0Y))
-//         assertPointLessish(maxPoint, Point(cubic.anchor0X, cubic.anchor0Y))
-//         assertPointGreaterish(minPoint, Point(cubic.control0X, cubic.control0Y))
-//         assertPointLessish(maxPoint, Point(cubic.control0X, cubic.control0Y))
-//         assertPointGreaterish(minPoint, Point(cubic.control1X, cubic.control1Y))
-//         assertPointLessish(maxPoint, Point(cubic.control1X, cubic.control1Y))
-//         assertPointGreaterish(minPoint, Point(cubic.anchor1X, cubic.anchor1Y))
-//         assertPointLessish(maxPoint, Point(cubic.anchor1X, cubic.anchor1Y))
-//     }
-// }
+Matcher shapeListWithinRect(Rect bounds) {
+  return allOf(
+    isA<List<Cubic2D>>(),
+    everyElement(
+      allOf(
+        _HasAnchor0(offsetWithinRect(bounds)),
+        _HasControl0(offsetWithinRect(bounds)),
+        _HasControl1(offsetWithinRect(bounds)),
+        _HasAnchor1(offsetWithinRect(bounds)),
+      ),
+    ),
+  );
+}
 
 ktTransformResult identityTransform(double x, double y) => (x: x, y: y);
 
@@ -139,7 +175,10 @@ ktTransformResult Function(double, double) pointRotator(double angle) {
   };
 }
 
-ktTransformResult Function(double, double) scaleTransform(double sx, double sy) {
+ktTransformResult Function(double, double) scaleTransform(
+  double sx,
+  double sy,
+) {
   return (x, y) {
     return (x: x * sx, y: y * sy);
   };
