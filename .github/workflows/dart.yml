@@ -54,7 +54,7 @@ jobs:
         run: dart pub global activate coverage
 
       - name: Run Tests
-        run: dart pub global run coverage:test_with_coverage --branch-coverage --function-coverage -- test
+        run: dart pub global run coverage:test_with_coverage --branch-coverage --function-coverage
         working-directory: ${{ matrix.package }}
         # Only run tests if there are any files in the `test` directory
         if: ${{ always() && hashFiles(format('{0}/test/**', matrix.package)) != '' }}
