@@ -44,12 +44,12 @@ class _ShapesOverviewScreenState extends State<ShapesOverviewScreen>
             shape: value,
             enableFeedback: true,
             clipBehavior: Clip.antiAlias,
-            child: DecoratedBox(
+            child: const DecoratedBox(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    const Color.fromARGB(255, 209, 224, 141),
-                    const Color.fromARGB(255, 237, 46, 208),
+                    Color.fromARGB(255, 209, 224, 141),
+                    Color.fromARGB(255, 237, 46, 208),
                   ],
                 ),
               ),
@@ -59,7 +59,7 @@ class _ShapesOverviewScreenState extends State<ShapesOverviewScreen>
         },
       ),
       body: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 5,
           mainAxisExtent: 128 + 64,
         ),
@@ -78,7 +78,7 @@ class _ShapesOverviewScreenState extends State<ShapesOverviewScreen>
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.all(32.0),
+                    padding: const EdgeInsets.all(32),
                     child: Center(
                       child: AspectRatio(
                         aspectRatio: 1,
@@ -95,20 +95,20 @@ class _ShapesOverviewScreenState extends State<ShapesOverviewScreen>
                               color: const Color.fromARGB(255, 0, 0, 0),
                               shape: shapesList[index],
                             ),
-                            child: SizedBox.expand(),
+                            child: const SizedBox.expand(),
                           ),
                         ),
                       ),
                     ),
                   ),
                 ),
-                Divider(
+                const Divider(
                   thickness: 1,
-                  color: const Color.fromARGB(26, 0, 0, 0),
+                  color: Color.fromARGB(26, 0, 0, 0),
                   height: 0,
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.all(4),
                   child: Text(
                     ShapesOverviewScreen.namesList[index],
                     style: style,

@@ -104,16 +104,16 @@ final class Cubic2D extends Curve2D {
   }
 
   @internal
-  bool zeroLength() {
+  bool get zeroLength {
     return (anchor0X - anchor1X).abs() < distanceEpsilon &&
         (anchor0Y - anchor1Y).abs() < distanceEpsilon;
   }
 
   @internal
   bool convexTo(Cubic2D next) {
-    var prevVertex = Offset(anchor0X, anchor0Y);
-    var currVertex = Offset(anchor1X, anchor1Y);
-    var nextVertex = Offset(next.anchor1X, next.anchor1Y);
+    final prevVertex = Offset(anchor0X, anchor0Y);
+    final currVertex = Offset(anchor1X, anchor1Y);
+    final nextVertex = Offset(next.anchor1X, next.anchor1Y);
     return convex(prevVertex, currVertex, nextVertex);
   }
 
@@ -131,7 +131,7 @@ final class Cubic2D extends Curve2D {
   }) {
     // A curve might be of zero-length, with both anchors co-lated.
     // Just return the point itself.
-    if (zeroLength()) {
+    if (zeroLength) {
       return (anchor0X, anchor0Y, anchor0X, anchor0Y);
     }
 
@@ -152,33 +152,33 @@ final class Cubic2D extends Curve2D {
 
     // Find the derivative, which is a quadratic Bezier. Then we can solve for t using
     // the quadratic formula
-    var xa = -anchor0X + 3 * control0X - 3 * control1X + anchor1X;
-    var xb = 2 * anchor0X - 4 * control0X + 2 * control1X;
-    var xc = -anchor0X + control0X;
+    final xa = -anchor0X + 3 * control0X - 3 * control1X + anchor1X;
+    final xb = 2 * anchor0X - 4 * control0X + 2 * control1X;
+    final xc = -anchor0X + control0X;
 
     if (_zeroIsh(xa)) {
       // Try Muller's method instead; it can find a single root when a is 0
       if (xb != 0) {
-        var t = 2 * xc / (-2 * xb);
+        final t = 2 * xc / (-2 * xb);
         if (t >= 0 && t <= 1) {
-          double it = (transformInternal(t).dx);
+          final double it = transformInternal(t).dx;
           if (it < minX) minX = it;
           if (it > maxX) maxX = it;
         }
       }
     } else {
-      var xs = xb * xb - 4 * xa * xc;
+      final xs = xb * xb - 4 * xa * xc;
       if (xs >= 0) {
-        var t1 = (-xb + sqrt(xs)) / (2 * xa);
+        final t1 = (-xb + sqrt(xs)) / (2 * xa);
         if (t1 >= 0 && t1 <= 1) {
-          double it = transformInternal(t1).dx;
+          final double it = transformInternal(t1).dx;
           if (it < minX) minX = it;
           if (it > maxX) maxX = it;
         }
 
-        var t2 = (-xb - sqrt(xs)) / (2 * xa);
+        final t2 = (-xb - sqrt(xs)) / (2 * xa);
         if (t2 >= 0 && t2 <= 1) {
-          double it = transformInternal(t2).dx;
+          final double it = transformInternal(t2).dx;
 
           if (it < minX) minX = it;
           if (it > maxX) maxX = it;
@@ -187,32 +187,32 @@ final class Cubic2D extends Curve2D {
     }
 
     // Repeat the above for y coordinate
-    var ya = -anchor0Y + 3 * control0Y - 3 * control1Y + anchor1Y;
-    var yb = 2 * anchor0Y - 4 * control0Y + 2 * control1Y;
-    var yc = -anchor0Y + control0Y;
+    final ya = -anchor0Y + 3 * control0Y - 3 * control1Y + anchor1Y;
+    final yb = 2 * anchor0Y - 4 * control0Y + 2 * control1Y;
+    final yc = -anchor0Y + control0Y;
 
     if (_zeroIsh(ya)) {
       if (yb != 0) {
-        var t = 2 * yc / (-2 * yb);
+        final t = 2 * yc / (-2 * yb);
         if (t >= 0 && t <= 1) {
-          double it = transformInternal(t).dy;
+          final double it = transformInternal(t).dy;
           if (it < minY) minY = it;
           if (it > maxY) maxY = it;
         }
       }
     } else {
-      var ys = yb * yb - 4 * ya * yc;
+      final ys = yb * yb - 4 * ya * yc;
       if (ys >= 0) {
-        var t1 = (-yb + sqrt(ys)) / (2 * ya);
+        final t1 = (-yb + sqrt(ys)) / (2 * ya);
         if (t1 >= 0 && t1 <= 1) {
-          double it = transformInternal(t1).dy;
+          final double it = transformInternal(t1).dy;
           if (it < minY) minY = it;
           if (it > maxY) maxY = it;
         }
 
-        var t2 = (-yb - sqrt(ys)) / (2 * ya);
+        final t2 = (-yb - sqrt(ys)) / (2 * ya);
         if (t2 >= 0 && t2 <= 1) {
-          double it = transformInternal(t2).dy;
+          final double it = transformInternal(t2).dy;
           if (it < minY) minY = it;
           if (it > maxY) maxY = it;
         }
@@ -225,8 +225,8 @@ final class Cubic2D extends Curve2D {
   /// original starting and ending anchor points.
   // TODO: cartesian optimization?
   (Cubic2D, Cubic2D) split(double t) {
-    var u = 1 - t;
-    var pointOnCurve = transform(t);
+    final u = 1 - t;
+    final pointOnCurve = transform(t);
     return (
       Cubic2D(
         anchor0X,
@@ -399,22 +399,22 @@ final class Cubic2D extends Curve2D {
     double x1,
     double y1,
   ) {
-    var p0d = Offset(x0 - centerX, y0 - centerY).normalize();
-    var p1d = Offset(x1 - centerX, y1 - centerY).normalize();
-    var rotatedP0 = p0d.rotate90();
-    var rotatedP1 = p1d.rotate90();
-    var clockwise =
+    final p0d = Offset(x0 - centerX, y0 - centerY).normalize();
+    final p1d = Offset(x1 - centerX, y1 - centerY).normalize();
+    final rotatedP0 = p0d.rotate90();
+    final rotatedP1 = p1d.rotate90();
+    final clockwise =
         rotatedP0.dotProduct(Offset(x1 - centerX, y1 - centerY)) >= 0;
-    var cosa = p0d.dotProduct(p1d);
-    if (cosa > 0.999) /* p0 ~= p1 */
-      return Cubic2D.straightLine(x0, y0, x1, y1);
-    var k =
+    final cosa = p0d.dotProduct(p1d);
+    /* p0 ~= p1 */
+    if (cosa > 0.999) return Cubic2D.straightLine(x0, y0, x1, y1);
+    final k =
         Offset(x0 - centerX, y0 - centerY).distance *
         4 /
         3 *
         (sqrt(2 * (1 - cosa)) - sqrt(1 - cosa * cosa)) /
         (1 - cosa) *
-        ((clockwise) ? 1.0 : -1.0);
+        (clockwise ? 1.0 : -1.0);
     return Cubic2D(
       x0,
       y0,
@@ -432,7 +432,7 @@ final class Cubic2D extends Curve2D {
   Cubic2D.empty(double x0, double y0) : this(x0, y0, x0, y0, x0, y0, x0, y0);
 
   void ktTransformOnePoint(ktPointTransformer f, int ix) {
-    switch(ix) {
+    switch (ix) {
       case 0:
         final r = f(anchor0X, anchor0Y);
         anchor0X = r.x;
@@ -456,7 +456,7 @@ final class Cubic2D extends Curve2D {
 
   /// Transforms (as in moves, rotates, scales, etc.) the points in this [Cubic] with the given
   /// [PointTransformer] [f].
-  /// 
+  ///
   /// Not to be confused with [transform] which maps the parameter t to a point on the curve.
   void ktTransform(ktPointTransformer f) {
     final a = f(anchor0X, anchor0Y);

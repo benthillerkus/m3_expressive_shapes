@@ -1,7 +1,5 @@
-import 'package:example/list.dart';
 import 'package:example/table.dart';
 import 'package:flutter/material.dart';
-import 'package:m3_expressive_shapes/m3e_shapes.dart';
 
 void main() {
   runApp(const MainApp());
@@ -12,8 +10,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: ShapesOverviewScreen()
-    );
+    return const MaterialApp(home: ShapesOverviewScreen());
   }
 }

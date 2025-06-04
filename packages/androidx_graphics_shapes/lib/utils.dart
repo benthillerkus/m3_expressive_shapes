@@ -44,10 +44,10 @@ bool collinearIsh(
 ) {
     // The dot product of a perpendicular angle is 0. By rotating one of the vectors,
     // we save the calculations to convert the dot product to degrees afterwards.
-    var ab = Offset(bX - aX, bY - aY).rotate90();
-    var ac = Offset(cX - aX, cY - aY);
-    var dotProduct = ab.dotProduct(ac).abs();
-    var relativeTolerance = tolerance * ab.distance * ac.distance;
+    final ab = Offset(bX - aX, bY - aY).rotate90();
+    final ac = Offset(cX - aX, cY - aY);
+    final dotProduct = ab.dotProduct(ac).abs();
+    final relativeTolerance = tolerance * ab.distance * ac.distance;
 
     return dotProduct < tolerance || dotProduct < relativeTolerance;
 }
@@ -75,8 +75,8 @@ double findMinimum(
     var a = v0;
     var b = v1;
     while (b - a > tolerance) {
-        var c1 = (2 * a + b) / 3;
-        var c2 = (2 * b + a) / 3;
+        final c1 = (2 * a + b) / 3;
+        final c2 = (2 * b + a) / 3;
         if (f(c1) < f(c2)) {
             b = c2;
         } else {

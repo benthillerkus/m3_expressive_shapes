@@ -6,7 +6,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test("default corner", () {
-    final defaultCorner = CornerRounding();
+    // ignore: use_named_constants
+    final defaultCorner = const CornerRounding();
     expect(defaultCorner.radius, 0.0);
     expect(defaultCorner.smoothing, 0.0);
   });
@@ -18,19 +19,19 @@ void main() {
   });
 
   test("rounded corner", () {
-    final rounded = CornerRounding(radius: 5.0);
+    final rounded = const CornerRounding(radius: 5);
     expect(rounded.radius, 5.0);
     expect(rounded.smoothing, 0.0);
   });
 
   test("smoothed corner", () {
-    final smoothed = CornerRounding(smoothing: 0.5);
+    final smoothed = const CornerRounding(smoothing: 0.5);
     expect(smoothed.radius, 0.0);
     expect(smoothed.smoothing, 0.5);
   });
 
   test("rounded and smoothed corner", () {
-    final roundedAndSmoothed = CornerRounding(radius: 5.0, smoothing: 0.5);
+    final roundedAndSmoothed = const CornerRounding(radius: 5, smoothing: 0.5);
     expect(roundedAndSmoothed.radius, 5.0);
     expect(roundedAndSmoothed.smoothing, 0.5);
   });

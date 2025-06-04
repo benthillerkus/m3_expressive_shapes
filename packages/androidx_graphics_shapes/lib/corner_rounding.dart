@@ -42,7 +42,7 @@ class CornerRounding {
   final double smoothing;
 
   /// [Unrounded] has a rounding radius of zero, producing a sharp corner at a vertex.
-  static const unrounded = const CornerRounding();
+  static const unrounded = CornerRounding();
 }
 
 /*

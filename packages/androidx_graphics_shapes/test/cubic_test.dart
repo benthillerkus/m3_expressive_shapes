@@ -5,8 +5,6 @@ import 'dart:ui';
 import 'package:androidx_graphics_shapes/cubic.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:androidx_graphics_shapes/androidx_graphics_shapes.dart';
-
 import 'utils.dart';
 
 void main() {
@@ -194,14 +192,14 @@ void main() {
 
   group("transform", () {
     test("identity test", () {
-      var transform = identityTransform;
-      var transformedCubic = cubic.ktTransformed(transform);
+      final transform = identityTransform;
+      final transformedCubic = cubic.ktTransformed(transform);
       expect(cubic, cubic2DMoreOrLessEquals(transformedCubic));
     });
 
     test("scale test", () {
-      var transform = scaleTransform(3, 3);
-      var transformedCubic = cubic.ktTransformed(transform);
+      final transform = scaleTransform(3, 3);
+      final transformedCubic = cubic.ktTransformed(transform);
       expect(cubic * 3, cubic2DMoreOrLessEquals(transformedCubic));
     });
 
@@ -209,8 +207,8 @@ void main() {
       final tx = 200.0;
       final ty = 300.0;
       final translationVector = Offset(tx, ty);
-      var transform = translateTransform(tx, ty);
-      var transformedCubic = cubic.ktTransformed(transform);
+      final transform = translateTransform(tx, ty);
+      final transformedCubic = cubic.ktTransformed(transform);
       expect(
         cubic.anchor0 + translationVector,
         offsetMoreOrLessEquals(transformedCubic.anchor0, epsilon: epsilon),
@@ -232,10 +230,9 @@ void main() {
 
   test("empty cubic has zero length test", () {
     final emptyCubic = Cubic2D.empty(10, 10);
-    expect(emptyCubic.zeroLength(), isTrue);
+    expect(emptyCubic.zeroLength, isTrue);
   });
 }
-
 
 /*
  * Copyright 2022 The Android Open Source Project

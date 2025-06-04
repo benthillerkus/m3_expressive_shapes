@@ -18,7 +18,7 @@ class _ListShapesScreenState extends State<ListShapesScreen>
     with SingleTickerProviderStateMixin {
   late final Ticker _ticker;
 
-  Duration _progress = const Duration();
+  Duration _progress = Duration.zero;
 
   @override
   void initState() {
@@ -56,7 +56,7 @@ class _ListShapesScreenState extends State<ListShapesScreen>
             itemCount: shapesList.length,
             itemBuilder: (context, index) {
               return Align(
-                alignment: Alignment(index % 2 == 0 ? -.5 : .5, 0),
+                alignment: Alignment(index.isEven ? -.5 : .5, 0),
                 child: DecoratedBox(
                   position: DecorationPosition.foreground,
                   decoration: ShapeDecoration(
