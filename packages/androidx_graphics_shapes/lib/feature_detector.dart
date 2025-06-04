@@ -46,7 +46,8 @@ List<Feature> detectFeatures(List<Cubic2D> cubics) {
   return res;
 }
 
-extension on Cubic2D {
+@visibleForTesting
+extension Cubic2DFeatureDetectorExt on Cubic2D {
   /// Convert to [Feature.Edge] if this cubic describes a straight line, otherwise to a
   /// [Feature.Corner]. Corner convexity is determined by [convex].
   Feature asFeature(Cubic2D next) =>

@@ -1,128 +1,138 @@
 // Ported from FeatureDetectorTest.kt in https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:graphics/graphics-shapes/src/androidInstrumentedTest/kotlin/androidx/graphics/shapes/FeatureDetectorTest.kt
 // See original license at the end of this file.
 
+import 'package:androidx_graphics_shapes/cubic.dart';
+import 'package:androidx_graphics_shapes/features.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:androidx_graphics_shapes/feature_detector.dart';
-void main() {}
 
-// class FeatureDetectorTest {
-//     @Test
-//     fun recognizesStraightness() {
-//         assertTrue(Cubic.straightLine(0f, 0f, 1f, 0f).straightIsh())
-//     }
+import 'utils.dart';
 
-//     @Test
-//     fun recognizesStraightnessIsh() {
-//         val slightlyNotStraightCubic =
-//             Cubic(323.508f, 201.759f, 317.35f, 192.008f, 311.193f, 182.227f, 305.035f, 172.475f)
-//         assertTrue(slightlyNotStraightCubic.straightIsh())
-//     }
+void main() {
+  test("recognizes straightness", () {
+    final cubic = Cubic2D.straightLine(0, 0, 1, 0);
+    expect(cubic.straightIsh(), isTrue);
+  });
 
-//     @Test
-//     fun recognizesCurvature() {
-//         val roundCubic = Cubic(0f, 0f, 0.5f, 0.5f, 0.5f, 0.5f, 1f, 0f)
-//         assertFalse(roundCubic.straightIsh())
-//     }
+  test("recognizes straightness-ish", () {
+    final slightlyNotStraightCubic = Cubic2D(
+      323.508,
+      201.759,
+      317.35,
+      192.008,
+      311.193,
+      182.227,
+      305.035,
+      172.475,
+    );
+    expect(slightlyNotStraightCubic.straightIsh(), isTrue);
+  });
 
-//     @Test
-//     fun recognizesSmoothnessForCurvedCubic() {
-//         val baseCubic = Cubic(0f, 0f, 0f, 10f, 10f, 10f, 10f, 0f)
-//         val smoothContinuation = Cubic(10f, 0f, 10f, -10f, 20f, -10f, 20f, 0f)
+  test("recognizes curvature", () {
+    final roundCubic = Cubic2D(0, 0, 0.5, 0.5, 0.5, 0.5, 1, 0);
+    expect(roundCubic.straightIsh(), isFalse);
+  });
 
-//         assertTrue(baseCubic.smoothesIntoIsh(smoothContinuation))
-//     }
+  test("recognizes smoothness for curved cubic", () {
+    final baseCubic = Cubic2D(0, 0, 0, 10, 10, 10, 10, 0);
+    final smoothContinuation = Cubic2D(10, 0, 10, -10, 20, -10, 20, 0);
+    expect(baseCubic.smoothesIntoIsh(smoothContinuation), isTrue);
+  });
 
-//     @Test
-//     fun recognizesSmoothnessForStraightCubic() {
-//         val baseCubic = Cubic.straightLine(0f, 0f, 10f, 0f)
-//         val smoothContinuation = Cubic.straightLine(10f, 0f, 20f, 0f)
+  test("recognizes smoothness for straight cubic", () {
+    final baseCubic = Cubic2D.straightLine(0, 0, 10, 0);
+    final smoothContinuation = Cubic2D.straightLine(10, 0, 20, 0);
+    expect(baseCubic.smoothesIntoIsh(smoothContinuation), isTrue);
+  });
 
-//         assertTrue(baseCubic.smoothesIntoIsh(smoothContinuation))
-//     }
+  test("recognizes smoothness within relative tolerance", () {
+    // These two cubics are from the edge of an imported shape. Even though they don't
+    // count as smooth within the absolute distance epsilon, relatively seen they should count.
 
-//     @Test
-//     fun recognizesSmoothnessWithinRelativeTolerance() {
-//         // These two cubics are from the edge of an imported shape. Even though they don't
-//         // count as smooth within the absolute distance epsilon, relatively seen they should count.
-//         val baseCubic =
-//             Cubic(323.508f, 201.759f, 317.35f, 192.008f, 311.193f, 182.227f, 305.008f, 172.475f)
-//         val smoothContinuation =
-//             Cubic(305.008f, 172.475f, 290.812f, 149.962f, 276.617f, 127.42f, 262.422f, 104.907f)
+    // dart format off
+    final baseCubic = Cubic2D(323.508, 201.759, 317.35, 192.008, 311.193, 182.227, 305.008, 172.475);
+    final smoothContinuation = Cubic2D(305.008, 172.475, 290.812, 149.962, 276.617, 127.42, 262.422, 104.907);
+    // dart format on
+    expect(baseCubic.smoothesIntoIsh(smoothContinuation), isTrue);
+  });
 
-//         assertTrue(baseCubic.smoothesIntoIsh(smoothContinuation))
-//     }
+  test("empty cubics are not straight-ish", () {
+    expect(Cubic2D.empty(10, 10).straightIsh(), isFalse);
+  });
 
-//     @Test
-//     fun emptyCubicsAreNotStraightIsh() {
-//         assertFalse(Cubic.empty(10f, 10f).straightIsh())
-//     }
+  test("recognizes alignment for straight lines", () {
+    final baseCubic = Cubic2D.straightLine(0, 0, 10, 0);
+    final smoothContinuation = Cubic2D.straightLine(10, 0, 20, 0);
 
-//     @Test
-//     fun recognizesAlignmentForStraightLines() {
-//         val baseCubic = Cubic.straightLine(0f, 0f, 10f, 0f)
-//         val smoothContinuation = Cubic.straightLine(10f, 0f, 20f, 0f)
+    expect(baseCubic.alignsIshWith(smoothContinuation), isTrue);
+  });
 
-//         assertTrue(baseCubic.alignsIshWith(smoothContinuation))
-//     }
+  test("recognizes alignment within relative tolerance", () {
+    // These two cubics are from the edge of an imported shape. Even though the second edge
+    // is very small within the given scale, it is not empty. However, even the length of
+    // 0.027 is so relatively tiny in the given range of coordinates, that it should be seen as
+    // an empty cubic. Therefore, the second can be seen as an extend of the first.
+    final baseCubic = Cubic2D(
+      323.508,
+      201.759,
+      317.35,
+      192.008,
+      311.193,
+      182.227,
+      305.035,
+      172.475,
+    );
+    final smoothContinuation = Cubic2D.straightLine(305.035, 172.475, 305.008, 172.475);
 
-//     @Test
-//     fun recognizesAlignmentWithinRelativeTolerance() {
-//         // These two cubics are from the edge of an imported shape. Even though the second edge
-//         // is very small within the given scale, it is not empty. However, even the length of
-//         // 0.027 is so relatively tiny in the given range of coordinates, that it should be seen as
-//         // an empty cubic. Therefore, the second can be seen as an extend of the first.
-//         val baseCubic =
-//             Cubic(323.508f, 201.759f, 317.35f, 192.008f, 311.193f, 182.227f, 305.035f, 172.475f)
-//         val smoothContinuation = Cubic.straightLine(305.035f, 172.475f, 305.008f, 172.475f)
+    expect(baseCubic.alignsIshWith(smoothContinuation), isTrue);
+  });
 
-//         assertTrue(baseCubic.alignsIshWith(smoothContinuation))
-//     }
+  test("includes alignment for empty cubics", () {
+    final base = Cubic2D.straightLine(0, 0, 10, 0);
+    final empty = Cubic2D.empty(10, 0);
 
-//     @Test
-//     fun includesAlignmentForEmptyCubics() {
-//         val base = Cubic.straightLine(0f, 0f, 10f, 0f)
-//         val empty = Cubic.empty(10f, 0f)
+    expect(base.alignsIshWith(empty), isTrue);
+    expect(empty.alignsIshWith(base), isTrue);
+  });
 
-//         assertTrue(base.alignsIshWith(empty))
-//         assertTrue(empty.alignsIshWith(base))
-//     }
+  test("converts straight cubic to edge", () {
+    final cubic = Cubic2D.straightLine(0, 0, 10, 0);
+    final followingCubic = Cubic2D.straightLine(10, 0, 20, 0);
 
-//     @Test
-//     fun convertsStraightCubicToEdge() {
-//         val cubic = Cubic.straightLine(0f, 0f, 10f, 0f)
-//         val followingCubic = Cubic.straightLine(10f, 0f, 20f, 0f)
+    final converted = cubic.asFeature(followingCubic);
+    final expected = Edge([cubic]);
 
-//         val converted = cubic.asFeature(followingCubic)
-//         val expected = Feature.Edge(listOf(cubic))
+    expect(converted, isA<Edge>());
+    expect(expected, featureMoreOrLessEquals(converted));
+  });
 
-//         assertTrue(converted is Feature.Edge)
-//         assertFeaturesEqualish(expected, converted)
-//     }
+  test("converts curved cubic to corner", () {
+    final cubic = Cubic2D(0, 0, 0.5, 0.5, 0.5, 0.5, 1, 0);
+    final followingCubic = Cubic2D(1, 0, 1.5, 1.5, 1.5, 1.5, 2, 0);
 
-//     @Test
-//     fun convertsCurvedCubicToCorner() {
-//         val cubic = Cubic(0f, 0f, 0.5f, 0.5f, 0.5f, 0.5f, 1f, 0f)
-//         val followingCubic = Cubic(1f, 0f, 1.5f, 1.5f, 1.5f, 1.5f, 2f, 0f)
+    final converted = cubic.asFeature(followingCubic);
+    final expected = Corner([cubic], convex: false);
 
-//         val converted = cubic.asFeature(followingCubic)
-//         val expected = Feature.Corner(listOf(cubic), false)
+    expect(converted, isA<Corner>());
+    expect(expected, featureMoreOrLessEquals(converted));
+  });
 
-//         assertTrue(converted is Feature.Corner)
-//         assertFeaturesEqualish(expected, converted)
-//     }
+  group("reconstructs polygon", () {
+    test("reconstructs pill star", () {
+      throw UnimplementedError(
+        "This test is not yet ported from FeatureDetectorTest.kt",
+      );
+    });
 
-//     @Test
-//     fun convertsEmptyCubicToCorner() {
-//         val cubic = Cubic.empty(1f, 0f)
-//         val followingCubic = Cubic(1f, 0f, 1.5f, 1.5f, 1.5f, 1.5f, 2f, 0f)
+    test("reconstructs rounded pill star close enough", () {
+      throw UnimplementedError(
+        "This test is not yet ported from FeatureDetectorTest.kt",
+      );
+    });
+  });
+}
 
-//         val converted = cubic.asFeature(followingCubic)
-//         val expected = Feature.Corner(listOf(cubic), false)
-
-//         assertTrue(converted is Feature.Corner)
-//         assertFeaturesEqualish(expected, converted)
-//     }
-
+// TODO Port the rest of the tests from FeatureDetectorTest.kt
 //     @Test
 //     fun reconstructsPillStar() {
 //         val originalPolygon = RoundedPolygon.pillStar()
