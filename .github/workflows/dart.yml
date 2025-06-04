@@ -1,0 +1,105 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Dart
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  # From https://github.com/benthillerkus/db_migrations_with_multiverse_time_travel/blob/main/.github/workflows/dart.yml
+  packages:
+    runs-on: ubuntu-latest
+    name: Gather Packages
+    outputs:
+      packages: ${{ steps.getpackages.outputs.paths }}
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dart-lang/setup-dart@v1
+
+      - id: getpackages
+        # Basically gets a list of all packages listed in the root `pubspec.yaml`
+        # and then outputs the list of paths to those packages
+        # excluding the root package itself
+        run: |
+          echo "paths=$(dart pub workspace list --json | jq -r -c '[.packages[] | select(.name != "workspace") | .path]' | sed 's|${{ github.workspace }}/||g')" >> $GITHUB_OUTPUT
+
+  # Tests each package in the workspace in parallel
+  #
+  # Before testing, it applies basic fixes and autoformats the code.
+  # If fixing & autoformatting made any changes, the results are recorded
+  # so that they can later be rerun and committed back to the repository.
+  # (we can't directly commit the changes here, as the `test` job runs in parallel)
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: ${{ fromJson(needs.packages.outputs.packages) }}
+      fail-fast: false
+    permissions:
+      contents: read
+    needs: packages
+    steps:
+      - uses: actions/checkout@v4
+  
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - run: flutter --version
+      - run: flutter pub get
+
+      - name: Install coverage tool
+        run: dart pub global activate coverage
+
+      - name: Run Tests
+        run: dart pub global run coverage:test_with_coverage --branch-coverage --function-coverage
+        working-directory: ${{ matrix.package }}
+        # Only run tests if there are any files in the `test` directory
+        if: ${{ always() && hashFiles(format('{0}/test/**', matrix.package)) != '' }}
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ${{ matrix.package }}/coverage
+          flags: ${{ matrix.package }}
+
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: ${{ fromJson(needs.packages.outputs.packages) }}
+      fail-fast: false
+    permissions:
+      contents: read
+    needs: packages
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - run: flutter --version
+      - run: flutter pub get
+
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+        working-directory: ${{ matrix.package }}
+
+      - name: Analyze project source
+        run: dart analyze
+        working-directory: ${{ matrix.package }}
