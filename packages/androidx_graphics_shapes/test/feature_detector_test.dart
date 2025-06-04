@@ -82,7 +82,12 @@ void main() {
       305.035,
       172.475,
     );
-    final smoothContinuation = Cubic2D.straightLine(305.035, 172.475, 305.008, 172.475);
+    final smoothContinuation = Cubic2D.straightLine(
+      305.035,
+      172.475,
+      305.008,
+      172.475,
+    );
 
     expect(baseCubic.alignsIshWith(smoothContinuation), isTrue);
   });

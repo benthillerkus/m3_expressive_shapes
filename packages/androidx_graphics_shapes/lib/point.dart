@@ -7,7 +7,6 @@ import 'dart:ui';
 import 'package:meta/meta.dart';
 
 extension OffsetExt on Offset {
-
   @pragma('vm:prefer-inline')
   double dotProduct(Offset other) => dx * other.dx + dy * other.dy;
 

@@ -12,9 +12,7 @@ class ShapesOverviewScreen extends StatefulWidget {
   State<ShapesOverviewScreen> createState() => _ShapesOverviewScreenState();
 }
 
-class _ShapesOverviewScreenState extends State<ShapesOverviewScreen>
-   {
-
+class _ShapesOverviewScreenState extends State<ShapesOverviewScreen> {
   ShapeBorder _current = const CircleBorder();
   ShapeBorder _next = const CircleBorder();
 
@@ -31,10 +29,7 @@ class _ShapesOverviewScreenState extends State<ShapesOverviewScreen>
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 223, 216, 234),
       floatingActionButton: TweenAnimationBuilder(
-        tween: ShapeBorderTween(
-          begin: _current,
-          end: _next,
-        ),
+        tween: ShapeBorderTween(begin: _current, end: _next),
         duration: const Duration(milliseconds: 500),
         curve: Curves.elasticOut,
         builder: (context, value, child) {
