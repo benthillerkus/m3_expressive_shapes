@@ -29,7 +29,7 @@ extension Rotate90Ext on Offset {
 /// Similar to number % mod, but ensures the result is always positive. For example: 4 % 3 =
 /// positiveModulo(4, 3) = 1, but: -4 % 3 = -1 positiveModulo(-4, 3) = 2
 @internal
-num positiveModulo(num number, num mod) => (number % mod + mod) % mod;
+double positiveModulo(double number, double mod) => (number % mod + mod) % mod;
 
 /// Returns whether C is on the line defined by the two points AB
 @internal
