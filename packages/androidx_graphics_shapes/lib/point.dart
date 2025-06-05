@@ -6,6 +6,8 @@ import 'dart:ui';
 
 import 'package:meta/meta.dart';
 
+import 'cubic.dart';
+
 extension OffsetExt on Offset {
   @pragma('vm:prefer-inline')
   double dotProduct(Offset other) => dx * other.dx + dy * other.dy;
@@ -17,6 +19,11 @@ extension OffsetExt on Offset {
   bool clockwise(Offset other) => dx * other.dy - dy * other.dx > 0;
 
   Offset normalize() => this / distance;
+
+  Offset ktTransformed(ktPointTransformer f) {
+    final (:x, :y) = f(dx, dy);
+    return Offset(x, y);
+  }
 }
 
 /*
