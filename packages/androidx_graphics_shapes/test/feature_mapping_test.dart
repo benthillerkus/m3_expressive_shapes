@@ -4,7 +4,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:androidx_graphics_shapes/feature_mapping.dart';
 
-void main() {}
+void main() {
+  throw UnimplementedError("Need to port Polygons first");
+}
 
 // package androidx.graphics.shapes
 
