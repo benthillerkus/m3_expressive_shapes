@@ -45,8 +45,7 @@ abstract class Feature {
   ///
   /// @param cubics The list of raw cubics describing the feature's shape
   /// @throws [ArgumentError] for lists of empty cubics or non-continuous cubics
-  factory Feature.buildIgnorableFeature(List<Cubic2D> cubics) =>
-      _validated(Edge(cubics));
+  factory Feature.buildIgnorableFeature(List<Cubic2D> cubics) => _validated(Edge(cubics));
 
   /// Group a [Cubic2D] object to an edge (neither inward or outward identification in a shape).
   ///
@@ -134,9 +133,7 @@ class Edge extends Feature {
 
   @override
   Edge reversed() {
-    final reversedCubics = cubics.reversed
-        .map((cubic) => cubic.reverse())
-        .toList();
+    final reversedCubics = cubics.reversed.map((cubic) => cubic.reverse()).toList();
 
     return Edge(reversedCubics);
   }
@@ -168,16 +165,12 @@ class Corner extends Feature {
   final bool convex;
   @override
   Corner ktTransformed(ktPointTransformer f) {
-    return Corner([
-      for (final cubic in cubics) cubic.ktTransformed(f),
-    ], convex: convex);
+    return Corner([for (final cubic in cubics) cubic.ktTransformed(f)], convex: convex);
   }
 
   @override
   Corner reversed() {
-    final reversedCubics = cubics.reversed
-        .map((cubic) => cubic.reverse())
-        .toList();
+    final reversedCubics = cubics.reversed.map((cubic) => cubic.reverse()).toList();
 
     // TODO: b/369320447 - Revert flag negation when [RoundedPolygon] ignores orientation
     // for setting the flag

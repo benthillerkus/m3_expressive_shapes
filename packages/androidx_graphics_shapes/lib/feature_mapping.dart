@@ -23,15 +23,11 @@ class ProgressableFeature {
   final double progress;
 
   @override
-  String toString() =>
-      "ProgressableFeature(feature=$feature, progress=$progress)";
+  String toString() => "ProgressableFeature(feature=$feature, progress=$progress)";
 }
 
 /// featureMapper creates a mapping between the "features" (rounded corners) of two shapes
-DoubleMapper featureMapper(
-  MeasuredFeatures features1,
-  MeasuredFeatures features2,
-) {
+DoubleMapper featureMapper(MeasuredFeatures features1, MeasuredFeatures features2) {
   // We only use corners for this mapping.
   final filteredFeatures1 = [
     for (final f in features1)
@@ -42,14 +38,9 @@ DoubleMapper featureMapper(
       if (f.feature is Corner) f,
   ];
 
-  final featureProgressMapping = doMapping(
-    filteredFeatures1,
-    filteredFeatures2,
-  );
+  final featureProgressMapping = doMapping(filteredFeatures1, filteredFeatures2);
 
-  _log.fine(
-    featureProgressMapping.map((it) => "${it.$1} -> ${it.$2}").join(", "),
-  );
+  _log.fine(featureProgressMapping.map((it) => "${it.$1} -> ${it.$2}").join(", "));
 
   final res = DoubleMapper(featureProgressMapping);
   {
@@ -70,8 +61,7 @@ class DistanceVertex {
   final ProgressableFeature f2;
 
   @override
-  String toString() =>
-      "DistanceVertex(distance=$distance, f1=${f1.progress}, f2=${f2.progress})";
+  String toString() => "DistanceVertex(distance=$distance, f1=${f1.progress}, f2=${f2.progress})";
 }
 
 /// Returns a mapping of the features between features1 and features2. The return is a list of pairs
@@ -94,8 +84,7 @@ List<(double, double)> doMapping(
   final distanceVertexList = <DistanceVertex>[
     for (final f1 in features1)
       for (final f2 in features2)
-        if (featureDistSquared(f1.feature, f2.feature) case final d
-            when d != double.maxFinite)
+        if (featureDistSquared(f1.feature, f2.feature) case final d when d != double.maxFinite)
           DistanceVertex(d, f1, f2),
   ]..sort((a, b) => a.distance.compareTo(b.distance));
 
@@ -183,8 +172,7 @@ double featureDistSquared(Feature f1, Feature f2) {
     _log.fine("*** Feature distance ∞ for convex-vs-concave corners");
     return double.maxFinite;
   }
-  return (featureRepresentativePoint(f1) - featureRepresentativePoint(f2))
-      .distanceSquared;
+  return (featureRepresentativePoint(f1) - featureRepresentativePoint(f2)).distanceSquared;
 }
 
 // TODO: b/378441547 - Move to explicit parameter / expose?

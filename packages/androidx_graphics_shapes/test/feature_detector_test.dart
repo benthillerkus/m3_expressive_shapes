@@ -82,12 +82,7 @@ void main() {
       305.035,
       172.475,
     );
-    final smoothContinuation = Cubic2D.straightLine(
-      305.035,
-      172.475,
-      305.008,
-      172.475,
-    );
+    final smoothContinuation = Cubic2D.straightLine(305.035, 172.475, 305.008, 172.475);
 
     expect(baseCubic.alignsIshWith(smoothContinuation), isTrue);
   });
@@ -124,15 +119,11 @@ void main() {
 
   group("reconstructs polygon", () {
     test("reconstructs pill star", () {
-      throw UnimplementedError(
-        "This test is not yet ported from FeatureDetectorTest.kt",
-      );
+      throw UnimplementedError("This test is not yet ported from FeatureDetectorTest.kt");
     });
 
     test("reconstructs rounded pill star close enough", () {
-      throw UnimplementedError(
-        "This test is not yet ported from FeatureDetectorTest.kt",
-      );
+      throw UnimplementedError("This test is not yet ported from FeatureDetectorTest.kt");
     });
   });
 }

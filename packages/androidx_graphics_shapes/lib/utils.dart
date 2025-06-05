@@ -66,12 +66,7 @@ bool convex(Offset previous, Offset current, Offset next) {
 /// NTS: Does it make sense to split the function f in 2, one to generate a candidate, of a custom
 /// type T (i.e. (Float) -> T), and one to evaluate it ( (T) -> Float )?
 @internal
-double findMinimum(
-  double v0,
-  double v1,
-  FindMinimumFunction f, {
-  double tolerance = 1e-3,
-}) {
+double findMinimum(double v0, double v1, FindMinimumFunction f, {double tolerance = 1e-3}) {
   var a = v0;
   var b = v1;
   while (b - a > tolerance) {

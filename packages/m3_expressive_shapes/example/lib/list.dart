@@ -14,8 +14,7 @@ class ListShapesScreen extends StatefulWidget {
   State<ListShapesScreen> createState() => _ListShapesScreenState();
 }
 
-class _ListShapesScreenState extends State<ListShapesScreen>
-    with SingleTickerProviderStateMixin {
+class _ListShapesScreenState extends State<ListShapesScreen> with SingleTickerProviderStateMixin {
   late final Ticker _ticker;
 
   Duration _progress = Duration.zero;
@@ -59,10 +58,7 @@ class _ListShapesScreenState extends State<ListShapesScreen>
                 alignment: Alignment(index.isEven ? -.5 : .5, 0),
                 child: DecoratedBox(
                   position: DecorationPosition.foreground,
-                  decoration: ShapeDecoration(
-                    color: Colors.pink,
-                    shape: shapesList[index],
-                  ),
+                  decoration: ShapeDecoration(color: Colors.pink, shape: shapesList[index]),
                   child: SizedBox(
                     width: 256 - 64,
                     height: 256 - 64,

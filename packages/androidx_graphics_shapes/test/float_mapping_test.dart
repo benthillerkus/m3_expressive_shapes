@@ -44,9 +44,7 @@ void main() {
   });
 
   test("multiple point test", () {
-    validateMapping(DoubleMapper(const [(0.4, 0.2), (0.5, 0.22), (0.0, 0.8)]), (
-      x,
-    ) {
+    validateMapping(DoubleMapper(const [(0.4, 0.2), (0.5, 0.22), (0.0, 0.8)]), (x) {
       if (x < 0.4) {
         return (0.8 + x) % 1.0;
       } else if (x < 0.5) {
@@ -60,25 +58,20 @@ void main() {
 
   test("target double wrap throws", () {
     expect(
-      () =>
-          DoubleMapper(const [(0.0, 0.0), (0.3, 0.6), (0.6, 0.3), (0.9, 0.9)]),
+      () => DoubleMapper(const [(0.0, 0.0), (0.3, 0.6), (0.6, 0.3), (0.9, 0.9)]),
       throwsA(isA<InvalidProgressException>()),
     );
   });
 
   test("source double wrap throws", () {
     expect(
-      () =>
-          DoubleMapper(const [(0.0, 0.0), (0.6, 0.3), (0.3, 0.6), (0.9, 0.9)]),
+      () => DoubleMapper(const [(0.0, 0.0), (0.6, 0.3), (0.3, 0.6), (0.9, 0.9)]),
       throwsA(isA<InvalidProgressException>()),
     );
   });
 }
 
-void validateMapping(
-  DoubleMapper mapper,
-  double Function(double) expectedFunction,
-) {
+void validateMapping(DoubleMapper mapper, double Function(double) expectedFunction) {
   for (int i = 0; i <= 10000; i++) {
     final source = i / 10000.0;
     final target = expectedFunction(source);

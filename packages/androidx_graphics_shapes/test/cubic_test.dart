@@ -41,39 +41,15 @@ void main() {
     divCubic = cubic / 1;
     expect(cubic, cubic2DMoreOrLessEquals(divCubic));
     divCubic = cubic / 2.0;
-    expect(
-      p0 / 2.0,
-      offsetMoreOrLessEquals(divCubic.anchor0, epsilon: epsilon),
-    );
-    expect(
-      p1 / 2.0,
-      offsetMoreOrLessEquals(divCubic.control0, epsilon: epsilon),
-    );
-    expect(
-      p2 / 2.0,
-      offsetMoreOrLessEquals(divCubic.control1, epsilon: epsilon),
-    );
-    expect(
-      p3 / 2.0,
-      offsetMoreOrLessEquals(divCubic.anchor1, epsilon: epsilon),
-    );
+    expect(p0 / 2.0, offsetMoreOrLessEquals(divCubic.anchor0, epsilon: epsilon));
+    expect(p1 / 2.0, offsetMoreOrLessEquals(divCubic.control0, epsilon: epsilon));
+    expect(p2 / 2.0, offsetMoreOrLessEquals(divCubic.control1, epsilon: epsilon));
+    expect(p3 / 2.0, offsetMoreOrLessEquals(divCubic.anchor1, epsilon: epsilon));
     divCubic = cubic / 2;
-    expect(
-      p0 / 2.0,
-      offsetMoreOrLessEquals(divCubic.anchor0, epsilon: epsilon),
-    );
-    expect(
-      p1 / 2.0,
-      offsetMoreOrLessEquals(divCubic.control0, epsilon: epsilon),
-    );
-    expect(
-      p2 / 2.0,
-      offsetMoreOrLessEquals(divCubic.control1, epsilon: epsilon),
-    );
-    expect(
-      p3 / 2.0,
-      offsetMoreOrLessEquals(divCubic.anchor1, epsilon: epsilon),
-    );
+    expect(p0 / 2.0, offsetMoreOrLessEquals(divCubic.anchor0, epsilon: epsilon));
+    expect(p1 / 2.0, offsetMoreOrLessEquals(divCubic.control0, epsilon: epsilon));
+    expect(p2 / 2.0, offsetMoreOrLessEquals(divCubic.control1, epsilon: epsilon));
+    expect(p3 / 2.0, offsetMoreOrLessEquals(divCubic.anchor1, epsilon: epsilon));
   });
 
   test("times test", () {
@@ -88,60 +64,24 @@ void main() {
     expect(p2, offsetMoreOrLessEquals(timesCubic.control1, epsilon: epsilon));
     expect(p3, offsetMoreOrLessEquals(timesCubic.anchor1, epsilon: epsilon));
     timesCubic = cubic * 2.0;
-    expect(
-      p0 * 2.0,
-      offsetMoreOrLessEquals(timesCubic.anchor0, epsilon: epsilon),
-    );
-    expect(
-      p1 * 2.0,
-      offsetMoreOrLessEquals(timesCubic.control0, epsilon: epsilon),
-    );
-    expect(
-      p2 * 2.0,
-      offsetMoreOrLessEquals(timesCubic.control1, epsilon: epsilon),
-    );
-    expect(
-      p3 * 2.0,
-      offsetMoreOrLessEquals(timesCubic.anchor1, epsilon: epsilon),
-    );
+    expect(p0 * 2.0, offsetMoreOrLessEquals(timesCubic.anchor0, epsilon: epsilon));
+    expect(p1 * 2.0, offsetMoreOrLessEquals(timesCubic.control0, epsilon: epsilon));
+    expect(p2 * 2.0, offsetMoreOrLessEquals(timesCubic.control1, epsilon: epsilon));
+    expect(p3 * 2.0, offsetMoreOrLessEquals(timesCubic.anchor1, epsilon: epsilon));
     timesCubic = cubic * 2;
-    expect(
-      p0 * 2.0,
-      offsetMoreOrLessEquals(timesCubic.anchor0, epsilon: epsilon),
-    );
-    expect(
-      p1 * 2.0,
-      offsetMoreOrLessEquals(timesCubic.control0, epsilon: epsilon),
-    );
-    expect(
-      p2 * 2.0,
-      offsetMoreOrLessEquals(timesCubic.control1, epsilon: epsilon),
-    );
-    expect(
-      p3 * 2.0,
-      offsetMoreOrLessEquals(timesCubic.anchor1, epsilon: epsilon),
-    );
+    expect(p0 * 2.0, offsetMoreOrLessEquals(timesCubic.anchor0, epsilon: epsilon));
+    expect(p1 * 2.0, offsetMoreOrLessEquals(timesCubic.control0, epsilon: epsilon));
+    expect(p2 * 2.0, offsetMoreOrLessEquals(timesCubic.control1, epsilon: epsilon));
+    expect(p3 * 2.0, offsetMoreOrLessEquals(timesCubic.anchor1, epsilon: epsilon));
   });
 
   test("plus test", () {
     final offsetCubic = cubic * 2.0;
     final plusCubic = cubic + offsetCubic;
-    expect(
-      p0 + offsetCubic.anchor0,
-      offsetMoreOrLessEquals(plusCubic.anchor0, epsilon: epsilon),
-    );
-    expect(
-      p1 + offsetCubic.control0,
-      offsetMoreOrLessEquals(plusCubic.control0, epsilon: epsilon),
-    );
-    expect(
-      p2 + offsetCubic.control1,
-      offsetMoreOrLessEquals(plusCubic.control1, epsilon: epsilon),
-    );
-    expect(
-      p3 + offsetCubic.anchor1,
-      offsetMoreOrLessEquals(plusCubic.anchor1, epsilon: epsilon),
-    );
+    expect(p0 + offsetCubic.anchor0, offsetMoreOrLessEquals(plusCubic.anchor0, epsilon: epsilon));
+    expect(p1 + offsetCubic.control0, offsetMoreOrLessEquals(plusCubic.control0, epsilon: epsilon));
+    expect(p2 + offsetCubic.control1, offsetMoreOrLessEquals(plusCubic.control1, epsilon: epsilon));
+    expect(p3 + offsetCubic.anchor1, offsetMoreOrLessEquals(plusCubic.anchor1, epsilon: epsilon));
   });
 
   test("reverse test", () {
@@ -165,28 +105,16 @@ void main() {
     expect(cubic.anchor0, split0.anchor0);
     expect(cubic.anchor1, split1.anchor1);
 
-    expect(
-      split0.anchor1,
-      offsetWithinRect(Rect.fromPoints(cubic.anchor0, cubic.anchor1)),
-    );
-    expect(
-      split1.anchor0,
-      offsetWithinRect(Rect.fromPoints(cubic.anchor0, cubic.anchor1)),
-    );
+    expect(split0.anchor1, offsetWithinRect(Rect.fromPoints(cubic.anchor0, cubic.anchor1)));
+    expect(split1.anchor0, offsetWithinRect(Rect.fromPoints(cubic.anchor0, cubic.anchor1)));
   });
 
   test("point on curve test", () {
     var halfway = cubic.transform(0.5);
-    expect(
-      halfway,
-      offsetWithinRect(Rect.fromPoints(cubic.anchor0, cubic.anchor1)),
-    );
+    expect(halfway, offsetWithinRect(Rect.fromPoints(cubic.anchor0, cubic.anchor1)));
     final straightLineCubic = Cubic2D.straightLine(p0.dx, p0.dy, p3.dx, p3.dy);
     halfway = straightLineCubic.transform(0.5);
-    final computedHalfway = Offset(
-      p0.dx + 0.5 * (p3.dx - p0.dx),
-      p0.dy + 0.5 * (p3.dy - p0.dy),
-    );
+    final computedHalfway = Offset(p0.dx + 0.5 * (p3.dx - p0.dx), p0.dy + 0.5 * (p3.dy - p0.dy));
     expect(computedHalfway, offsetMoreOrLessEquals(halfway, epsilon: epsilon));
   });
 

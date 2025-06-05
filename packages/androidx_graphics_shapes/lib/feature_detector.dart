@@ -36,9 +36,7 @@ List<Feature> detectFeatures(List<Cubic2D> cubics) {
     res.add(current.asFeature(next));
 
     if (!current.smoothesIntoIsh(next)) {
-      res.add(
-        Cubic2D.empty(current.anchor1X, current.anchor1Y).asFeature(next),
-      );
+      res.add(Cubic2D.empty(current.anchor1X, current.anchor1Y).asFeature(next));
     }
 
     current = next;
@@ -91,9 +89,7 @@ extension Cubic2DFeatureDetectorExt on Cubic2D {
   /// Determines if all of this' points align with next's points. For straight lines, this is the same
   /// as if next was a continuation of this.
   bool alignsIshWith(Cubic2D next) =>
-      straightIsh() && next.straightIsh() && smoothesIntoIsh(next) ||
-      zeroLength ||
-      next.zeroLength;
+      straightIsh() && next.straightIsh() && smoothesIntoIsh(next) || zeroLength || next.zeroLength;
 
   /// Create a new cubic by extending A to B's second anchor point
   Cubic2D extend(Cubic2D other) => zeroLength

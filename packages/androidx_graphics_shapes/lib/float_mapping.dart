@@ -24,27 +24,15 @@ double linearMap(Float32List xValues, Float32List yValues, double x) {
   if (x < 0 || x > 1) throw ArgumentError.value(x, 'x', 'Invalid progress: $x');
   final segmentStartIndex = xValues.indexed
       .map((t) => t.$1)
-      .firstWhere(
-        (it) =>
-            progressInRange(x, xValues[it], xValues[(it + 1) % xValues.length]),
-      );
+      .firstWhere((it) => progressInRange(x, xValues[it], xValues[(it + 1) % xValues.length]));
   final segmentEndIndex = (segmentStartIndex + 1) % xValues.length;
-  final segmentSizeX = positiveModulo(
-    xValues[segmentEndIndex] - xValues[segmentStartIndex],
-    1,
-  );
-  final segmentSizeY = positiveModulo(
-    yValues[segmentEndIndex] - yValues[segmentStartIndex],
-    1,
-  );
+  final segmentSizeX = positiveModulo(xValues[segmentEndIndex] - xValues[segmentStartIndex], 1);
+  final segmentSizeY = positiveModulo(yValues[segmentEndIndex] - yValues[segmentStartIndex], 1);
   final positionInSegment = (segmentSizeX < 0.001)
       ? 0.5
       : positiveModulo(x - xValues[segmentStartIndex], 1) / segmentSizeX;
 
-  return positiveModulo(
-    yValues[segmentStartIndex] + segmentSizeY * positionInSegment,
-    1,
-  );
+  return positiveModulo(yValues[segmentStartIndex] + segmentSizeY * positionInSegment, 1);
 }
 
 /// DoubleMapper creates mappings from values in the
@@ -94,7 +82,7 @@ class DoubleMapper extends ParametricCurve<double> {
 
   double operator [](double x) => map(x);
 
-  @override  
+  @override
   double transformInternal(double t) => map(t);
 }
 
@@ -116,21 +104,15 @@ void validateProgress(Float32List p) {
   var wraps = 0;
   for (final curr in p) {
     if (curr < 0 || curr >= 1) {
-      throw InvalidProgressException(
-        "FloatMapping - Progress outside of range: $p",
-      );
+      throw InvalidProgressException("FloatMapping - Progress outside of range: $p");
     }
     if (progressDistance(curr, prev) <= distanceEpsilon) {
-      throw InvalidProgressException(
-        "FloatMapping - Progress repeats a value: $p",
-      );
+      throw InvalidProgressException("FloatMapping - Progress repeats a value: $p");
     }
     if (curr < prev) {
       wraps++;
       if (wraps > 1) {
-        throw InvalidProgressException(
-          "FloatMapping - Progress wraps more than once: $p",
-        );
+        throw InvalidProgressException("FloatMapping - Progress wraps more than once: $p");
       }
     }
     prev = curr;

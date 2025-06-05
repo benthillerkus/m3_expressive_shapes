@@ -20,8 +20,7 @@ Matcher cubic2DMoreOrLessEquals(Cubic2D value, {double epsilon = epsilon}) {
 
 /// Lens for [Cubic2D] to focus on its [Cubic2D.anchor0].
 class _HasAnchor0 extends CustomMatcher {
-  _HasAnchor0(Matcher matcher)
-    : super('Cubic2D with anchor0', 'anchor0', matcher);
+  _HasAnchor0(Matcher matcher) : super('Cubic2D with anchor0', 'anchor0', matcher);
 
   @override
   Object? featureValueOf(dynamic actual) => (actual as Cubic2D).anchor0;
@@ -29,8 +28,7 @@ class _HasAnchor0 extends CustomMatcher {
 
 /// Lens for [Cubic2D] to focus on its [Cubic2D.control0].
 class _HasControl0 extends CustomMatcher {
-  _HasControl0(Matcher matcher)
-    : super('Cubic2D with control0', 'control0', matcher);
+  _HasControl0(Matcher matcher) : super('Cubic2D with control0', 'control0', matcher);
 
   @override
   Object? featureValueOf(dynamic actual) => (actual as Cubic2D).control0;
@@ -38,8 +36,7 @@ class _HasControl0 extends CustomMatcher {
 
 /// Lens for [Cubic2D] to focus on its [Cubic2D.control1].
 class _HasControl1 extends CustomMatcher {
-  _HasControl1(Matcher matcher)
-    : super('Cubic2D with control1', 'control1', matcher);
+  _HasControl1(Matcher matcher) : super('Cubic2D with control1', 'control1', matcher);
 
   @override
   Object? featureValueOf(dynamic actual) => (actual as Cubic2D).control1;
@@ -47,17 +44,13 @@ class _HasControl1 extends CustomMatcher {
 
 /// Lens for [Cubic2D] to focus on its [Cubic2D.anchor1].
 class _HasAnchor1 extends CustomMatcher {
-  _HasAnchor1(Matcher matcher)
-    : super('Cubic2D with anchor1', 'anchor1', matcher);
+  _HasAnchor1(Matcher matcher) : super('Cubic2D with anchor1', 'anchor1', matcher);
 
   @override
   Object? featureValueOf(dynamic actual) => (actual as Cubic2D).anchor1;
 }
 
-Matcher cubic2DListMoreOrLessEquals(
-  List<Cubic2D> expected, {
-  double epsilon = epsilon,
-}) {
+Matcher cubic2DListMoreOrLessEquals(List<Cubic2D> expected, {double epsilon = epsilon}) {
   return allOf(
     isA<List<Cubic2D>>(),
     hasLength(expected.length),
@@ -69,8 +62,7 @@ Matcher cubic2DListMoreOrLessEquals(
 
 /// Lens for [Feature] to focus on its cubics.
 class _HasCubic2DList extends CustomMatcher {
-  _HasCubic2DList(Matcher matcher)
-    : super('List<Cubic2D> with cubics', 'cubics', matcher);
+  _HasCubic2DList(Matcher matcher) : super('List<Cubic2D> with cubics', 'cubics', matcher);
 
   @override
   Object? featureValueOf(dynamic actual) => (actual as Feature).cubics;
@@ -78,11 +70,7 @@ class _HasCubic2DList extends CustomMatcher {
 
 class _IfBothAreCornersIsConvexSame extends CustomMatcher {
   _IfBothAreCornersIsConvexSame(Feature other)
-    : super(
-        'Feature with isConvex',
-        'isConvex',
-        equals(other is Corner ? other.convex : null),
-      );
+    : super('Feature with isConvex', 'isConvex', equals(other is Corner ? other.convex : null));
 
   @override
   Object? featureValueOf(dynamic actual) {
@@ -95,9 +83,7 @@ class _IfBothAreCornersIsConvexSame extends CustomMatcher {
 Matcher featureMoreOrLessEquals(Feature expected, {double epsilon = epsilon}) {
   return allOf(
     isA<Feature>(),
-    _HasCubic2DList(
-      cubic2DListMoreOrLessEquals(expected.cubics, epsilon: epsilon),
-    ),
+    _HasCubic2DList(cubic2DListMoreOrLessEquals(expected.cubics, epsilon: epsilon)),
     _IfBothAreCornersIsConvexSame(expected),
   );
 }
@@ -175,19 +161,13 @@ ktTransformResult Function(double, double) pointRotator(double angle) {
   };
 }
 
-ktTransformResult Function(double, double) scaleTransform(
-  double sx,
-  double sy,
-) {
+ktTransformResult Function(double, double) scaleTransform(double sx, double sy) {
   return (x, y) {
     return (x: x * sx, y: y * sy);
   };
 }
 
-ktTransformResult Function(double, double) translateTransform(
-  double dx,
-  double dy,
-) {
+ktTransformResult Function(double, double) translateTransform(double dx, double dy) {
   return (x, y) {
     return (x: x + dx, y: y + dy);
   };

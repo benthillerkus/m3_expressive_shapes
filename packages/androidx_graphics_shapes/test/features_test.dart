@@ -11,30 +11,18 @@ void main() {
   test("cannot build empty features", () {
     expect(() => Feature.buildConvexCorner([]), throwsA(isA<ArgumentError>()));
     expect(() => Feature.buildConcaveCorner([]), throwsA(isA<ArgumentError>()));
-    expect(
-      () => Feature.buildIgnorableFeature([]),
-      throwsA(isA<ArgumentError>()),
-    );
+    expect(() => Feature.buildIgnorableFeature([]), throwsA(isA<ArgumentError>()));
   });
 
   test("cannot build non-continous features", () {
     final cubic1 = Cubic2D.straightLine(0, 0, 1, 1);
     final cubic2 = Cubic2D.straightLine(10, 10, 11, 11);
 
-    expect(
-      () => Feature.buildConvexCorner([cubic1, cubic2]),
-      throwsA(isA<ArgumentError>()),
-    );
+    expect(() => Feature.buildConvexCorner([cubic1, cubic2]), throwsA(isA<ArgumentError>()));
 
-    expect(
-      () => Feature.buildConcaveCorner([cubic1, cubic2]),
-      throwsA(isA<ArgumentError>()),
-    );
+    expect(() => Feature.buildConcaveCorner([cubic1, cubic2]), throwsA(isA<ArgumentError>()));
 
-    expect(
-      () => Feature.buildIgnorableFeature([cubic1, cubic2]),
-      throwsA(isA<ArgumentError>()),
-    );
+    expect(() => Feature.buildIgnorableFeature([cubic1, cubic2]), throwsA(isA<ArgumentError>()));
   });
 
   test("build concave corner", () {

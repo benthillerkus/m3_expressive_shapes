@@ -42,10 +42,7 @@ class _ShapesOverviewScreenState extends State<ShapesOverviewScreen> {
             child: const DecoratedBox(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    Color.fromARGB(255, 209, 224, 141),
-                    Color.fromARGB(255, 237, 46, 208),
-                  ],
+                  colors: [Color.fromARGB(255, 209, 224, 141), Color.fromARGB(255, 237, 46, 208)],
                 ),
               ),
               child: SizedBox(width: 512, height: 512),
@@ -63,10 +60,7 @@ class _ShapesOverviewScreenState extends State<ShapesOverviewScreen> {
         itemBuilder: (context, index) {
           return DecoratedBox(
             decoration: BoxDecoration(
-              border: Border.all(
-                color: const Color.fromARGB(26, 0, 0, 0),
-                width: .5,
-              ),
+              border: Border.all(color: const Color.fromARGB(26, 0, 0, 0), width: .5),
             ),
 
             child: Column(
@@ -97,17 +91,10 @@ class _ShapesOverviewScreenState extends State<ShapesOverviewScreen> {
                     ),
                   ),
                 ),
-                const Divider(
-                  thickness: 1,
-                  color: Color.fromARGB(26, 0, 0, 0),
-                  height: 0,
-                ),
+                const Divider(thickness: 1, color: Color.fromARGB(26, 0, 0, 0), height: 0),
                 Padding(
                   padding: const EdgeInsets.all(4),
-                  child: Text(
-                    ShapesOverviewScreen.namesList[index],
-                    style: style,
-                  ),
+                  child: Text(ShapesOverviewScreen.namesList[index], style: style),
                 ),
               ],
             ),

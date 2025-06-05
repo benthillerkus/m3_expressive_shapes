@@ -15,8 +15,7 @@ class Circle extends CircleBorder {
 }
 
 class Square extends RoundedRectangleBorder {
-  const Square()
-    : super(borderRadius: const BorderRadius.all(Radius.circular(28)));
+  const Square() : super(borderRadius: const BorderRadius.all(Radius.circular(28)));
 }
 
 class Slanted extends Todo {

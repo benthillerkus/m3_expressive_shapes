@@ -26,12 +26,8 @@ final class Cubic2D extends Curve2D {
     this.anchor1Y,
   );
 
-  Cubic2D.fromOffsets(
-    Offset anchor0,
-    Offset control0,
-    Offset control1,
-    Offset anchor1,
-  ) : this(
+  Cubic2D.fromOffsets(Offset anchor0, Offset control0, Offset control1, Offset anchor1)
+    : this(
         anchor0.dx,
         anchor0.dy,
         control0.dx,
@@ -253,16 +249,8 @@ final class Cubic2D extends Curve2D {
   }
 
   /// Utility function to reverse the control/anchor points for this curve.
-  Cubic2D reverse() => Cubic2D(
-    anchor1X,
-    anchor1Y,
-    control1X,
-    control1Y,
-    control0X,
-    control0Y,
-    anchor0X,
-    anchor0Y,
-  );
+  Cubic2D reverse() =>
+      Cubic2D(anchor1X, anchor1Y, control1X, control1Y, control0X, control0Y, anchor0X, anchor0Y);
 
   /// Operator overload to enable adding Cubic objects together, like "c0 + c1"
   Cubic2D operator +(Cubic2D other) => Cubic2D(
@@ -403,8 +391,7 @@ final class Cubic2D extends Curve2D {
     final p1d = Offset(x1 - centerX, y1 - centerY).normalize();
     final rotatedP0 = p0d.rotate90();
     final rotatedP1 = p1d.rotate90();
-    final clockwise =
-        rotatedP0.dotProduct(Offset(x1 - centerX, y1 - centerY)) >= 0;
+    final clockwise = rotatedP0.dotProduct(Offset(x1 - centerX, y1 - centerY)) >= 0;
     final cosa = p0d.dotProduct(p1d);
     /* p0 ~= p1 */
     if (cosa > 0.999) return Cubic2D.straightLine(x0, y0, x1, y1);

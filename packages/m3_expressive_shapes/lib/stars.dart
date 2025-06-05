@@ -1,18 +1,12 @@
 import 'package:flutter/painting.dart';
 
 class Clover4Leaf extends StarBorder {
-  const Clover4Leaf()
-    : super(points: 4, pointRounding: 1, rotation: 45, innerRadiusRatio: .15);
+  const Clover4Leaf() : super(points: 4, pointRounding: 1, rotation: 45, innerRadiusRatio: .15);
 }
 
 class Clover8Leaf extends StarBorder {
   const Clover8Leaf()
-    : super(
-        points: 8,
-        pointRounding: 1,
-        rotation: 360 / 8 / 2,
-        innerRadiusRatio: .6,
-      );
+    : super(points: 8, pointRounding: 1, rotation: 360 / 8 / 2, innerRadiusRatio: .6);
 }
 
 class Burst extends StarBorder {
@@ -21,12 +15,7 @@ class Burst extends StarBorder {
 
 class SoftBurst extends StarBorder {
   const SoftBurst()
-    : super(
-        points: 10,
-        innerRadiusRatio: .7,
-        valleyRounding: .2,
-        pointRounding: .4,
-      );
+    : super(points: 10, innerRadiusRatio: .7, valleyRounding: .2, pointRounding: .4);
 }
 
 class Boom extends StarBorder {
