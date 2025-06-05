@@ -1,11 +1,25 @@
 // Ported from FeatureMappingTest.kt in https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:graphics/graphics-shapes/src/androidInstrumentedTest/kotlin/androidx/graphics/shapes/FeatureMappingTest.kt
 // See original license at the end of this file.
 
+import 'package:androidx_graphics_shapes/corner_rounding.dart';
+import 'package:androidx_graphics_shapes/rounded_polygon.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:androidx_graphics_shapes/feature_mapping.dart';
 
+import 'utils.dart';
+
 void main() {
-  throw UnimplementedError("Need to port Polygons first");
+  final triangleWithRoundings = RoundedPolygon.fromNumVerts(
+    3,
+    rounding: const CornerRounding(radius: 0.2),
+  );
+  final triangle = RoundedPolygon.fromNumVerts(3);
+  final square = RoundedPolygon.fromNumVerts(4);
+  final squareRotated = RoundedPolygon.fromNumVerts(4).ktTransformed(pointRotator(45));
+
+  test('feature mapping triangles', () {
+    throw UnimplementedError("Needs MeasuredPolygon and LengthMeasurer");
+  });
 }
 
 // package androidx.graphics.shapes
@@ -119,6 +133,10 @@ void main() {
 
 //         validator(distances.sortedDescending())
 //     }
+// }
+
+// Matcher verifyMapping(RoundedPolygon other, Matcher matcher) {
+
 // }
 
 /*
