@@ -5,6 +5,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:androidx_graphics_shapes/utils.dart';
+import 'package:flutter/animation.dart';
 import 'package:meta/meta.dart';
 
 /// Checks if the given progress is in the given progress range, since progress is in the [0..1)
@@ -64,7 +65,7 @@ double linearMap(Float32List xValues, Float32List yValues, double x) {
 /// This is used to create mappings of progress values between the start and end shape,
 /// which is then used to insert new curves and match curves overall.
 @internal
-class DoubleMapper {
+class DoubleMapper extends ParametricCurve<double> {
   final Float32List _sourceValues;
   final Float32List _targetValues;
 
@@ -90,6 +91,11 @@ class DoubleMapper {
     // We spread them as much as possible to minimize float errors.
     (0, 0), (0.5, 0.5),
   ]);
+
+  double operator [](double x) => map(x);
+
+  @override  
+  double transformInternal(double t) => map(t);
 }
 
 /// Verify that a list of progress values are all in the range [0.0, 1.0) and is monotonically
