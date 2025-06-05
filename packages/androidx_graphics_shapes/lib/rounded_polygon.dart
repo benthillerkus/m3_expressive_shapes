@@ -6,13 +6,12 @@ import 'dart:typed_data';
 
 import 'package:androidx_graphics_shapes/point.dart';
 import 'package:androidx_graphics_shapes/utils.dart';
+import 'package:flutter/painting.dart';
 import 'package:logging/logging.dart';
+import 'package:meta/meta.dart';
 
 import 'corner_rounding.dart';
 import 'cubic.dart';
-import 'package:flutter/painting.dart';
-import 'package:meta/meta.dart';
-
 import 'features.dart';
 
 final Logger _log = Logger("RoundedPolygon");
@@ -21,8 +20,7 @@ final Logger _log = Logger("RoundedPolygon");
 /// the vertices. Polygons can be constructed with either the number of vertices desired or an
 /// ordered list of vertices.
 class RoundedPolygon {
-  @internal
-  RoundedPolygon(this.features, this.center) {
+  RoundedPolygon._(this.features, this.center) {
     _initCubics();
 
     var prevCubic = cubics[cubics.length - 1];
@@ -133,19 +131,19 @@ class RoundedPolygon {
       it.add(features[i].ktTransformed(f));
     }
 
-    return RoundedPolygon(it, center);
+    return RoundedPolygon._(it, center);
   }
 
   /// Creates a new RoundedPolygon, moving and resizing this one, so it's completely inside the
   /// (0, 0) -> (1, 1) square, centered if there extra space in one direction
   RoundedPolygon normalized() {
     final bounds = calculateBounds();
-    final width = bounds.z - bounds.x;
-    final height = bounds.w - bounds.y;
+    final width = bounds.right - bounds.left;
+    final height = bounds.bottom - bounds.top;
     final side = max(width, height);
     // Center the shape if bounds are not a square
-    final offsetX = (side - width) / 2 - bounds.x; /* left */
-    final offsetY = (side - height) / 2 - bounds.y; /* top */
+    final offsetX = (side - width) / 2 - bounds.left;
+    final offsetY = (side - height) / 2 - bounds.top;
     return ktTransformed((x, y) => (x: (x + offsetX) / side, y: (y + offsetY) / side));
   }
 
@@ -190,19 +188,19 @@ class RoundedPolygon {
   /// @return The axis-aligned bounding box for this object, where the rectangles left, top, right,
   ///   and bottom values will be stored in entries 0, 1, 2, and 3, in that order.
 
-  Float32x4 calculateBounds({bool approximate = true}) {
+  Rect calculateBounds({bool approximate = true}) {
     var minX = double.infinity;
     var minY = double.infinity;
     var maxX = double.negativeInfinity;
     var maxY = double.negativeInfinity;
     for (final cubic in cubics) {
       final bounds = cubic.calculateBounds(approximate: approximate);
-      minX = min(minX, bounds.x);
-      minY = min(minY, bounds.y);
-      maxX = max(maxX, bounds.z);
-      maxY = max(maxY, bounds.w);
+      minX = min(minX, bounds.left);
+      minY = min(minY, bounds.top);
+      maxX = max(maxX, bounds.right);
+      maxY = max(maxY, bounds.bottom);
     }
-    return Float32x4(minX, minY, maxX, maxY);
+    return Rect.fromLTRB(minX, minY, maxX, maxY);
   }
 
   @override
@@ -243,8 +241,8 @@ class RoundedPolygon {
   /// @throws IllegalArgumentException If [perVertexRounding] is not null and its size is not equal to
   ///   [numVertices].
   /// @throws IllegalArgumentException [numVertices] must be at least 3.
-  factory RoundedPolygon.construct({
-    required int numVertices,
+  factory RoundedPolygon.fromNumVerts(
+    int numVertices, {
     double radius = 1,
     double centerX = 0,
     double centerY = 0,
@@ -260,7 +258,7 @@ class RoundedPolygon {
 
   /// Creates a copy of the given [RoundedPolygon]
   factory RoundedPolygon.copy(RoundedPolygon source) =>
-      RoundedPolygon(source.features, source.center);
+      RoundedPolygon._(source.features, source.center);
 
   /// This function takes the vertices (either supplied or calculated, depending on the constructor
   /// called), plus [CornerRounding] parameters, and creates the actual [RoundedPolygon] shape,
@@ -391,7 +389,7 @@ class RoundedPolygon {
       );
     }
 
-    return RoundedPolygon.fromFeaturesAndCenter(tempFeatures, centerX: centerX, centerY: centerY);
+    return RoundedPolygon.fromFeatures(tempFeatures, centerX: centerX, centerY: centerY);
   }
 
   /// This constructor takes a list of [Feature] objects that define the polygon's shape and curves. By
@@ -411,7 +409,7 @@ class RoundedPolygon {
   ///   placed. If none provided, the center will be averaged.
   /// Throws [ArgumentError] when [features] specifies less than 2 features which is not enough to describe a
   ///   closed shape.
-  factory RoundedPolygon.fromFeaturesAndCenter(
+  factory RoundedPolygon.fromFeatures(
     List<Feature> features, {
     double centerX = double.nan,
     double centerY = double.nan,
@@ -423,7 +421,7 @@ class RoundedPolygon {
         "RoundedPolygon must have at least 2 features",
       );
     }
-    if (!centerX.isNaN && !centerY.isNaN) return RoundedPolygon(features, Offset(centerX, centerY));
+    if (!centerX.isNaN && !centerY.isNaN) return RoundedPolygon._(features, Offset(centerX, centerY));
 
     final vertices = <double>[];
     for (final feature in features) {
@@ -436,7 +434,7 @@ class RoundedPolygon {
     final cX = (centerX.isNaN) ? calculatedCenter.dx : centerX;
     final cY = (centerY.isNaN) ? calculatedCenter.dy : centerY;
 
-    return RoundedPolygon(features, Offset(cX, cY));
+    return RoundedPolygon._(features, Offset(cX, cY));
   }
 }
 
@@ -597,11 +595,9 @@ class _RoundedCorner {
     ];
   }
 
-  /**
-     * If allowedCut (the amount we are able to cut) is greater than the expected cut (without
-     * smoothing applied yet), then there is room to apply smoothing and we calculate the actual
-     * smoothing value here.
-     */
+  /// If allowedCut (the amount we are able to cut) is greater than the expected cut (without
+  /// smoothing applied yet), then there is room to apply smoothing and we calculate the actual
+  /// smoothing value here.
   double _calculateActualSmoothingValue(double allowedCut) {
     if (allowedCut > expectedCut) {
       return smoothing;
@@ -612,26 +608,24 @@ class _RoundedCorner {
     }
   }
 
-  /**
-     * Compute a Bezier to connect the linear segment defined by corner and sideStart with the
-     * circular segment defined by circleCenter, circleSegmentIntersection,
-     * otherCircleSegmentIntersection and actualR. The bezier will start at the linear segment and
-     * end on the circular segment.
-     *
-     * @param actualRoundCut How much we are cutting of the corner to add the circular segment (this
-     *   is before smoothing, that will cut some more).
-     * @param actualSmoothingValues How much we want to smooth (this is the smooth parameter,
-     *   adjusted down if there is not enough room).
-     * @param corner The point at which the linear side ends
-     * @param sideStart The point at which the linear side starts
-     * @param circleSegmentIntersection The point at which the linear side and the circle intersect.
-     * @param otherCircleSegmentIntersection The point at which the opposing linear side and the
-     *   circle intersect.
-     * @param circleCenter The center of the circle.
-     * @param actualR The radius of the circle.
-     * @return a Bezier cubic curve that connects from the (cut) linear side and the (cut) circular
-     *   segment in a smooth way.
-     */
+  /// Compute a Bezier to connect the linear segment defined by corner and sideStart with the
+  /// circular segment defined by circleCenter, circleSegmentIntersection,
+  /// otherCircleSegmentIntersection and actualR. The bezier will start at the linear segment and
+  /// end on the circular segment.
+  ///
+  /// @param actualRoundCut How much we are cutting of the corner to add the circular segment (this
+  ///   is before smoothing, that will cut some more).
+  /// @param actualSmoothingValues How much we want to smooth (this is the smooth parameter,
+  ///   adjusted down if there is not enough room).
+  /// @param corner The point at which the linear side ends
+  /// @param sideStart The point at which the linear side starts
+  /// @param circleSegmentIntersection The point at which the linear side and the circle intersect.
+  /// @param otherCircleSegmentIntersection The point at which the opposing linear side and the
+  ///   circle intersect.
+  /// @param circleCenter The center of the circle.
+  /// @param actualR The radius of the circle.
+  /// @return a Bezier cubic curve that connects from the (cut) linear side and the (cut) circular
+  ///   segment in a smooth way.
   Cubic2D _computeFlankingCurve({
     required double actualRoundCut,
     required double actualSmoothingValues,
@@ -668,10 +662,8 @@ class _RoundedCorner {
     return Cubic2D.fromOffsets(curveStart, anchorStart, anchorEnd, curveEnd);
   }
 
-  /**
-     * Returns the intersection point of the two lines d0->d1 and p0->p1, or null if the lines do
-     * not intersect
-     */
+  /// Returns the intersection point of the two lines d0->d1 and p0->p1, or null if the lines do
+  /// not intersect
   Offset? _lineIntersection(Offset p0, Offset d0, Offset p1, Offset d1) {
     final rotatedD1 = d1.rotate90();
     final den = d0.dotProduct(rotatedD1);

@@ -119,11 +119,11 @@ final class Cubic2D extends Curve2D {
   /// This function returns the true bounds of this curve, filling [bounds] with the axis-aligned
   /// bounding box values for left, top, right, and bottom, in that order.
   @internal
-  Float32x4 calculateBounds({bool approximate = false}) {
+  Rect calculateBounds({bool approximate = false}) {
     // A curve might be of zero-length, with both anchors co-lated.
     // Just return the point itself.
     if (zeroLength) {
-      return Float32x4(anchor0X, anchor0Y, anchor0X, anchor0Y);
+      return Rect.fromLTRB(anchor0X, anchor0Y, anchor0X, anchor0Y);
     }
 
     var minX = min(anchor0X, anchor1X);
@@ -133,7 +133,7 @@ final class Cubic2D extends Curve2D {
 
     if (approximate) {
       // Approximate bounds use the bounding box of all anchors and controls
-      return Float32x4(
+      return Rect.fromLTRB(
         min(minX, min(control0X, control1X)),
         min(minY, min(control0Y, control1Y)),
         max(maxX, max(control0X, control1X)),
@@ -209,7 +209,7 @@ final class Cubic2D extends Curve2D {
         }
       }
     }
-    return Float32x4(minX, minY, maxX, maxY);
+    return Rect.fromLTRB(minX, minY, maxX, maxY);
   }
 
   /// Returns two Cubics, created by splitting this curve at the given distance of [t] between the

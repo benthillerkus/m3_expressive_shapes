@@ -1,11 +1,117 @@
 // Ported from RoundedPolygonTest.kt in https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:graphics/graphics-shapes/src/androidInstrumentedTest/kotlin/androidx/graphics/shapes/RoundedPolygonTest.kt
 // See original license at the end of this file.
 
-import 'package:flutter_test/flutter_test.dart';
+import 'dart:typed_data';
+import 'dart:ui';
+
+import 'package:androidx_graphics_shapes/corner_rounding.dart';
+import 'package:androidx_graphics_shapes/cubic.dart';
+import 'package:androidx_graphics_shapes/features.dart';
 import 'package:androidx_graphics_shapes/rounded_polygon.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import 'utils.dart';
 
 void main() {
-  throw UnimplementedError();
+  const rounding = CornerRounding(radius: .1);
+  const perVtxRounded = [rounding, rounding, rounding, rounding];
+
+  group("num verts constructor", () {
+    test("throws for too few vertices", () {
+      expect(() => RoundedPolygon.fromNumVerts(2), throwsArgumentError);
+    });
+
+    test("square in bounds", () {
+      final square = RoundedPolygon.fromNumVerts(4);
+      expect(square.cubics, shapeListWithinBounds(const Rect.fromLTRB(-1, -1, 1, 1)));
+    });
+
+    test("double square in bounds", () {
+      final doubleSquare = RoundedPolygon.fromNumVerts(4, radius: 2);
+      expect(doubleSquare.cubics, shapeListWithinBounds(const Rect.fromLTRB(-2, -2, 2, 2)));
+    });
+
+    test("square rounded in bounds", () {
+      final squareRounded = RoundedPolygon.fromNumVerts(4, rounding: rounding);
+      expect(squareRounded.cubics, shapeListWithinBounds(const Rect.fromLTRB(-1, -1, 1, 1)));
+    });
+
+    test("square per vertex rounded in bounds", () {
+      final squarePVRounded = RoundedPolygon.fromNumVerts(4, perVertexRounding: perVtxRounded);
+      expect(squarePVRounded.cubics, shapeListWithinBounds(const Rect.fromLTRB(-1, -1, 1, 1)));
+    });
+  });
+
+  group("vertices constructor", () {
+    const p0 = Offset(1, 0);
+    const p1 = Offset(0, 1);
+    const p2 = Offset(-1, 0);
+    const p3 = Offset(0, -1);
+    final verts = Float32List.fromList([p0.dx, p0.dy, p1.dx, p1.dy, p2.dx, p2.dy, p3.dx, p3.dy]);
+
+    test("throws for too few vertices", () {
+      expect(
+        () => RoundedPolygon.fromVertices(Float32List.fromList([p0.dx, p0.dy, p1.dx, p1.dy])),
+        throwsArgumentError,
+      );
+    });
+
+    test("manual square", () {
+      final manualSquare = RoundedPolygon.fromVertices(verts);
+      expect(manualSquare.cubics, shapeListWithinBounds(const Rect.fromLTRB(-1, -1, 1, 1)));
+    });
+
+    test("manual square with offset", () {
+      const offset = Offset(1, 2);
+      final offsetVerts = Float32List.fromList([
+        p0.dx + offset.dx,
+        p0.dy + offset.dy,
+        p1.dx + offset.dx,
+        p1.dy + offset.dy,
+        p2.dx + offset.dx,
+        p2.dy + offset.dy,
+        p3.dx + offset.dx,
+        p3.dy + offset.dy,
+      ]);
+      final manualSquareOffset = RoundedPolygon.fromVertices(offsetVerts, centerX: offset.dx, centerY: offset.dy);
+      expect(manualSquareOffset.cubics, shapeListWithinBounds(const Rect.fromLTRB(0, 1, 2, 3)));
+    });
+
+    test("manual square rounded", () {
+      final manualSquareRounded = RoundedPolygon.fromVertices(verts, rounding: rounding);
+      expect(manualSquareRounded.cubics, shapeListWithinBounds(const Rect.fromLTRB(-1, -1, 1, 1)));
+    });
+
+    test("manual square per vertex rounded", () {
+      final manualSquarePVRounded = RoundedPolygon.fromVertices(verts, perVertexRounding: perVtxRounded);
+      expect(manualSquarePVRounded.cubics, shapeListWithinBounds(const Rect.fromLTRB(-1, -1, 1, 1)));
+    });
+  });
+
+  group("features constructor", () {
+    test("throws for too few features", () {
+      expect(() => RoundedPolygon.fromFeatures([]), throwsArgumentError);
+      final corner = Corner([Cubic2D.empty(0, 0)]);
+      expect(() => RoundedPolygon.fromFeatures([corner]), throwsArgumentError);
+    });
+
+    test("throws for non-continuous features", () {
+      final cubic1 = Cubic2D.straightLine(0, 0, 1, 0);
+      final cubic2 = Cubic2D.straightLine(10, 10, 20, 20);
+      expect(
+        () => RoundedPolygon.fromFeatures([Feature.buildEdge(cubic1), Feature.buildEdge(cubic2)]),
+        throwsArgumentError,
+      );
+    });
+
+    throw UnimplementedError("Needs Shapes to be implemented");
+
+    // test("reconstructs square", () {
+    //   final base = RoundedPolygon.rectangle();
+    //   final actual = RoundedPolygon.fromFeatures(base.features);
+    //   expect(base, roundedPolygonMoreOrLessEquals(actual));
+    // });
+  });
 }
 
 // package androidx.graphics.shapes

@@ -3,6 +3,7 @@
 
 import 'package:androidx_graphics_shapes/cubic.dart';
 import 'package:androidx_graphics_shapes/features.dart';
+import 'package:androidx_graphics_shapes/rounded_polygon.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -88,14 +89,37 @@ Matcher featureMoreOrLessEquals(Feature expected, {double epsilon = epsilon}) {
   );
 }
 
-// internal fun assertPolygonsEqualish(expected: RoundedPolygon, actual: RoundedPolygon) {
-//     assertCubicListsEqualish(expected.cubics, actual.cubics)
+Matcher roundedPolygonMoreOrLessEquals(RoundedPolygon expected) {
+  return allOf(
+    isA<RoundedPolygon>(),
+    _HasCubics(cubic2DListMoreOrLessEquals(expected.cubics, epsilon: epsilon)),
+    _HasFeatures(
+      allOf(
+        isA<List<Feature>>(),
+        hasLength(expected.features.length),
+        pairwiseCompare(
+          expected.features,
+          (a, b) => featureMoreOrLessEquals(a, epsilon: epsilon).matches(b, {}),
+          "Feature more or less equals (within $epsilon)",
+        ),
+      ),
+    ),
+  );
+}
 
-//     assertEquals(expected.features.size, actual.features.size)
-//     for (i in expected.features.indices) {
-//         assertFeaturesEqualish(expected.features[i], actual.features[i])
-//     }
-// }
+class _HasCubics extends CustomMatcher {
+  _HasCubics(Matcher matcher) : super('RoundedPolygon with cubics', 'cubics', matcher);
+
+  @override
+  Object? featureValueOf(dynamic actual) => (actual as RoundedPolygon).cubics;
+}
+
+class _HasFeatures extends CustomMatcher {
+  _HasFeatures(Matcher matcher) : super('RoundedPolygon with features', 'features', matcher);
+
+  @override
+  Object? featureValueOf(dynamic actual) => (actual as RoundedPolygon).features;
+}
 
 class _HasDx extends CustomMatcher {
   _HasDx(Matcher matcher) : super('Offset with dx', 'dx', matcher);
@@ -127,25 +151,25 @@ Matcher offsetLessish(Offset other, {double epsilon = epsilon}) {
   );
 }
 
-Matcher offsetWithinRect(Rect rect) {
+Matcher offsetWithinBounds(Rect rect) {
   return allOf(
     isA<Offset>(),
     _HasDx(greaterThanOrEqualTo(rect.left)),
-    _HasDx(lessThan(rect.right)),
+    _HasDx(lessThanOrEqualTo(rect.right)),
     _HasDy(greaterThanOrEqualTo(rect.top)),
-    _HasDy(lessThan(rect.bottom)),
+    _HasDy(lessThanOrEqualTo(rect.bottom)),
   );
 }
 
-Matcher shapeListWithinRect(Rect bounds) {
+Matcher shapeListWithinBounds(Rect bounds) {
   return allOf(
     isA<List<Cubic2D>>(),
     everyElement(
       allOf(
-        _HasAnchor0(offsetWithinRect(bounds)),
-        _HasControl0(offsetWithinRect(bounds)),
-        _HasControl1(offsetWithinRect(bounds)),
-        _HasAnchor1(offsetWithinRect(bounds)),
+        _HasAnchor0(offsetWithinBounds(bounds)),
+        _HasControl0(offsetWithinBounds(bounds)),
+        _HasControl1(offsetWithinBounds(bounds)),
+        _HasAnchor1(offsetWithinBounds(bounds)),
       ),
     ),
   );
