@@ -13,6 +13,7 @@ import 'package:meta/meta.dart';
 import 'corner_rounding.dart';
 import 'cubic.dart';
 import 'features.dart';
+import 'shapes.dart';
 
 final Logger _log = Logger("RoundedPolygon");
 
@@ -437,6 +438,89 @@ class RoundedPolygon {
 
     return RoundedPolygon._(features, Offset(cX, cY));
   }
+
+  /// {@macro androidx.shapes.circle}
+  factory RoundedPolygon.circle({
+    int numVertices = 8,
+    double radius = 1,
+    double centerX = 0,
+    double centerY = 0,
+  }) => circle(numVertices: numVertices, radius: radius, centerX: centerX, centerY: centerY);
+
+  /// {@macro androidx.shapes.rectangle}
+  factory RoundedPolygon.rectangle({
+    double width = 2,
+    double height = 2,
+    CornerRounding rounding = CornerRounding.unrounded,
+    List<CornerRounding>? perVertexRounding,
+    double centerX = 0,
+    double centerY = 0,
+  }) => rectangle(
+    width: width,
+    height: height,
+    rounding: rounding,
+    perVertexRounding: perVertexRounding,
+    centerX: centerX,
+    centerY: centerY,
+  );
+
+  /// {@macro androidx.shapes.star}
+  factory RoundedPolygon.star(
+    int numVerticesPerRadius, {
+    double radius = 1,
+    double innerRadius = .5,
+    CornerRounding rounding = CornerRounding.unrounded,
+    CornerRounding? innerRounding,
+    List<CornerRounding>? perVertexRounding,
+    double centerX = 0,
+    double centerY = 0,
+  }) => star(
+    numVerticesPerRadius,
+    radius: radius,
+    innerRadius: innerRadius,
+    rounding: rounding,
+    innerRounding: innerRounding,
+    perVertexRounding: perVertexRounding,
+    centerX: centerX,
+    centerY: centerY,
+  );
+
+  /// {@macro androidx.shapes.pill}
+  factory RoundedPolygon.pill({
+    double width = 2,
+    double height = 1,
+    double smoothing = 0,
+    double centerX = 0,
+    double centerY = 0,
+  }) =>
+      pill(width: width, height: height, smoothing: smoothing, centerX: centerX, centerY: centerY);
+
+  /// {@macro androidx.shapes.pillStar}
+  factory RoundedPolygon.pillStar({
+    double width = 2,
+    double height = 1,
+    int numVerticesPerRadius = 8,
+    double innerRadiusRatio = .5,
+    CornerRounding rounding = CornerRounding.unrounded,
+    CornerRounding? innerRounding,
+    List<CornerRounding>? perVertexRounding,
+    double vertexSpacing = 0.5,
+    double startLocation = 0,
+    double centerX = 0,
+    double centerY = 0,
+  }) => pillStar(
+    width: width,
+    height: height,
+    numVerticesPerRadius: numVerticesPerRadius,
+    innerRadiusRatio: innerRadiusRatio,
+    rounding: rounding,
+    innerRounding: innerRounding,
+    perVertexRounding: perVertexRounding,
+    vertexSpacing: vertexSpacing,
+    startLocation: startLocation,
+    centerX: centerX,
+    centerY: centerY,
+  );
 }
 
 /// Calculates an estimated center position for the polygon, returning it. This function should only

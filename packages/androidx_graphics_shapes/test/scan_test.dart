@@ -13,7 +13,7 @@ void main() {
   });
 
   test("accumulate sum scan", () {
-  const myList = [2, 5, 1, 3, 6];
+    const myList = [2, 5, 1, 3, 6];
     final scanned = myList.scan(0, (acc, curr) {
       return acc + curr;
     }).toList();
