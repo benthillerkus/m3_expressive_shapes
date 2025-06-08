@@ -73,7 +73,11 @@ void main() {
         p3.dx + offset.dx,
         p3.dy + offset.dy,
       ]);
-      final manualSquareOffset = RoundedPolygon.fromVertices(offsetVerts, centerX: offset.dx, centerY: offset.dy);
+      final manualSquareOffset = RoundedPolygon.fromVertices(
+        offsetVerts,
+        centerX: offset.dx,
+        centerY: offset.dy,
+      );
       expect(manualSquareOffset.cubics, shapeListWithinBounds(const Rect.fromLTRB(0, 1, 2, 3)));
     });
 
@@ -83,8 +87,14 @@ void main() {
     });
 
     test("manual square per vertex rounded", () {
-      final manualSquarePVRounded = RoundedPolygon.fromVertices(verts, perVertexRounding: perVtxRounded);
-      expect(manualSquarePVRounded.cubics, shapeListWithinBounds(const Rect.fromLTRB(-1, -1, 1, 1)));
+      final manualSquarePVRounded = RoundedPolygon.fromVertices(
+        verts,
+        perVertexRounding: perVtxRounded,
+      );
+      expect(
+        manualSquarePVRounded.cubics,
+        shapeListWithinBounds(const Rect.fromLTRB(-1, -1, 1, 1)),
+      );
     });
   });
 
