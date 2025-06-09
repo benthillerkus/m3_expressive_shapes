@@ -12,40 +12,40 @@ const epsilon = 1e-4;
 Matcher cubic2DMoreOrLessEquals(Cubic2D value, {double epsilon = epsilon}) {
   return allOf(
     isA<Cubic2D>(),
-    _HasAnchor0(offsetMoreOrLessEquals(value.anchor0, epsilon: epsilon)),
-    _HasControl0(offsetMoreOrLessEquals(value.control0, epsilon: epsilon)),
-    _HasControl1(offsetMoreOrLessEquals(value.control1, epsilon: epsilon)),
-    _HasAnchor1(offsetMoreOrLessEquals(value.anchor1, epsilon: epsilon)),
+    HasAnchor0(offsetMoreOrLessEquals(value.anchor0, epsilon: epsilon)),
+    HasControl0(offsetMoreOrLessEquals(value.control0, epsilon: epsilon)),
+    HasControl1(offsetMoreOrLessEquals(value.control1, epsilon: epsilon)),
+    HasAnchor1(offsetMoreOrLessEquals(value.anchor1, epsilon: epsilon)),
   );
 }
 
 /// Lens for [Cubic2D] to focus on its [Cubic2D.anchor0].
-class _HasAnchor0 extends CustomMatcher {
-  _HasAnchor0(Matcher matcher) : super('Cubic2D with anchor0', 'anchor0', matcher);
+class HasAnchor0 extends CustomMatcher {
+  HasAnchor0(Matcher matcher) : super('Cubic2D with anchor0', 'anchor0', matcher);
 
   @override
   Object? featureValueOf(dynamic actual) => (actual as Cubic2D).anchor0;
 }
 
 /// Lens for [Cubic2D] to focus on its [Cubic2D.control0].
-class _HasControl0 extends CustomMatcher {
-  _HasControl0(Matcher matcher) : super('Cubic2D with control0', 'control0', matcher);
+class HasControl0 extends CustomMatcher {
+  HasControl0(Matcher matcher) : super('Cubic2D with control0', 'control0', matcher);
 
   @override
   Object? featureValueOf(dynamic actual) => (actual as Cubic2D).control0;
 }
 
 /// Lens for [Cubic2D] to focus on its [Cubic2D.control1].
-class _HasControl1 extends CustomMatcher {
-  _HasControl1(Matcher matcher) : super('Cubic2D with control1', 'control1', matcher);
+class HasControl1 extends CustomMatcher {
+  HasControl1(Matcher matcher) : super('Cubic2D with control1', 'control1', matcher);
 
   @override
   Object? featureValueOf(dynamic actual) => (actual as Cubic2D).control1;
 }
 
 /// Lens for [Cubic2D] to focus on its [Cubic2D.anchor1].
-class _HasAnchor1 extends CustomMatcher {
-  _HasAnchor1(Matcher matcher) : super('Cubic2D with anchor1', 'anchor1', matcher);
+class HasAnchor1 extends CustomMatcher {
+  HasAnchor1(Matcher matcher) : super('Cubic2D with anchor1', 'anchor1', matcher);
 
   @override
   Object? featureValueOf(dynamic actual) => (actual as Cubic2D).anchor1;
@@ -166,10 +166,10 @@ Matcher shapeListWithinBounds(Rect bounds) {
     isA<List<Cubic2D>>(),
     everyElement(
       allOf(
-        _HasAnchor0(offsetWithinBounds(bounds)),
-        _HasControl0(offsetWithinBounds(bounds)),
-        _HasControl1(offsetWithinBounds(bounds)),
-        _HasAnchor1(offsetWithinBounds(bounds)),
+        HasAnchor0(offsetWithinBounds(bounds)),
+        HasControl0(offsetWithinBounds(bounds)),
+        HasControl1(offsetWithinBounds(bounds)),
+        HasAnchor1(offsetWithinBounds(bounds)),
       ),
     ),
   );

@@ -454,7 +454,7 @@ Float32List _starVerticesFromNumVerts(
 ) {
   final result = Float32List(numVerticesPerRadius * 4);
   var arrayIndex = 0;
-  for (int i = 0; 0 < numVerticesPerRadius; i++) {
+  for (int i = 0; i < numVerticesPerRadius; i++) {
     var vertex = Offset.fromDirection(pi / numVerticesPerRadius * 2 * i, radius);
     result[arrayIndex++] = vertex.dx + centerX;
     result[arrayIndex++] = vertex.dy + centerY;
