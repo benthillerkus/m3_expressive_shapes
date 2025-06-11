@@ -1,8 +1,12 @@
 // Ported from FeatureDetectorTest.kt in https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:graphics/graphics-shapes/src/androidInstrumentedTest/kotlin/androidx/graphics/shapes/FeatureDetectorTest.kt
 // See original license at the end of this file.
 
+import 'dart:collection';
+
+import 'package:androidx_graphics_shapes/corner_rounding.dart';
 import 'package:androidx_graphics_shapes/cubic.dart';
 import 'package:androidx_graphics_shapes/features.dart';
+import 'package:androidx_graphics_shapes/rounded_polygon.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:androidx_graphics_shapes/feature_detector.dart';
 
@@ -118,95 +122,163 @@ void main() {
   });
 
   group("reconstructs polygon", () {
-    test("reconstructs pill star", () {
-      throw UnimplementedError("This test is not yet ported from FeatureDetectorTest.kt");
+    group("reconstructs pill star", () {
+      final originalPolygon = RoundedPolygon.pillStar();
+      final splitCubics = originalPolygon.cubics.expand((it) {
+        final (a, b) = it.split(.5);
+        return [a, b];
+      }).toList();
+
+      final createdPolygon = RoundedPolygon.fromFeatures(
+        detectFeatures(splitCubics),
+        centerX: originalPolygon.centerX,
+        centerY: originalPolygon.centerY,
+      );
+
+      test("cubics match", () {
+        // It's okay if the cubics' control points aren't the same, as long as the shape is the same
+        expect(originalPolygon.cubics, hasLength(createdPolygon.cubics.length));
+
+        for (final (index, created) in createdPolygon.cubics.indexed) {
+          final original = originalPolygon.cubics[index];
+
+          // pillStar has no roundings, so the created cubics shouldn't be as well
+          expect(created.straightIsh(), isTrue);
+          expect(original.straightIsh(), isTrue);
+
+          expect(created.anchor0, offsetMoreOrLessEquals(original.anchor0));
+          expect(created.anchor1, offsetMoreOrLessEquals(original.anchor1));
+        }
+      });
+
+      test("zip with next / window", () {
+        // https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/zip-with-next.html
+        final letters = ["a", "b", "c", "d", "e", "f"];
+        final pairs = letters.window(2, 1);
+        expect(pairs, hasLength(5));
+        expect(
+          pairs,
+          containsAllInOrder([
+            ["a", "b"],
+            ["b", "c"],
+            ["c", "d"],
+            ["d", "e"],
+            ["e", "f"],
+          ]),
+        );
+      });
+
+      test("features match", () {
+        // The order of the features can be different, as long as they describe the same shape
+        expect(originalPolygon.features, hasLength(createdPolygon.features.length));
+        expect(
+          originalPolygon.features.whereType<Corner>(),
+          hasLength(createdPolygon.features.whereType<Corner>().length),
+        );
+        expect(
+          originalPolygon.features.whereType<Edge>(),
+          hasLength(createdPolygon.features.whereType<Edge>().length),
+        );
+
+        expect(
+          createdPolygon.features.window(2, 1),
+          everyElement(
+            isA<List<Feature>>()
+                .having((it) => it.length, "length", 2)
+                .having(
+                  (it) =>
+                      it.first is Edge && it.last is Corner ||
+                      it.first is Corner && it.last is Edge,
+                  "edge-corner pattern",
+                  isTrue,
+                ),
+          ),
+        );
+
+        expect(
+          createdPolygon.features.whereType<Corner>(),
+          everyElement(
+            isA<Corner>().having(
+              (it) => it.cubics,
+              "cubics",
+              allOf(
+                isA<List<Cubic2D>>().having(
+                  (it) => it.first,
+                  "first element",
+                  isA<Cubic2D>().having((it) => it.zeroLength, "zero-length", isTrue),
+                ),
+                hasLength(1),
+              ),
+            ),
+          ),
+        );
+      });
     });
 
     test("reconstructs rounded pill star close enough", () {
-      throw UnimplementedError("This test is not yet ported from FeatureDetectorTest.kt");
+      // This test aims to ensure that our distance epsilon is not set too high that
+      // the roundings of pill star gets pointy as they are small in the [0,1] space
+      final originalPolygon = RoundedPolygon.pillStar(rounding: const CornerRounding(radius: 0.2));
+      final createdPolygon = RoundedPolygon.fromFeatures(
+        detectFeatures(originalPolygon.cubics),
+        centerX: originalPolygon.centerX,
+        centerY: originalPolygon.centerY,
+      );
+
+      expect(originalPolygon.cubics, hasLength(createdPolygon.cubics.length));
+      // Allow up to one difference...
+      expect(
+        (originalPolygon.features.length - createdPolygon.features.length).abs(),
+        lessThanOrEqualTo(1),
+      );
+      // ...as long as the edge - corner pattern persists
+      expect(
+        createdPolygon.features.window(2, 1),
+        everyElement(
+          isA<List<Feature>>()
+              .having((it) => it.length, "length", 2)
+              .having(
+                (it) =>
+                    it.first is Edge && it.last is Corner ||
+                    it.first is Corner && it.last is Edge,
+                "edge-corner pattern",
+                isTrue,
+              ),
+        ),
+      );
     });
   });
 }
 
-// TODO Port the rest of the tests from FeatureDetectorTest.kt
-//     @Test
-//     fun reconstructsPillStar() {
-//         val originalPolygon = RoundedPolygon.pillStar()
-//         val splitCubics = originalPolygon.cubics.flatMap { it.split(0.5f).toList() }
+extension ZipExt<T> on Iterable<T> {
+  Iterable<T> zip(Iterable<T> other) sync* {
+    final iterator = this.iterator;
+    final otherIterator = other.iterator;
+    while (iterator.moveNext() && otherIterator.moveNext()) {
+      yield iterator.current;
+      yield otherIterator.current;
+    }
+  }
+}
 
-//         val createdPolygon =
-//             RoundedPolygon(
-//                 detectFeatures(splitCubics),
-//                 originalPolygon.centerX,
-//                 originalPolygon.centerY,
-//             )
-
-//         // It's okay if the cubics' control points aren't the same, as long as the shape is the same
-//         assertEquals(originalPolygon.cubics.size, createdPolygon.cubics.size)
-//         createdPolygon.cubics.forEachIndexed { i, new ->
-//             val original = originalPolygon.cubics[i]
-
-//             // pillStar has no roundings, so the created cubics shouldn't be as well
-//             assertTrue(new.straightIsh())
-//             assertTrue(original.straightIsh())
-
-//             assertPointsEqualish(
-//                 Point(new.anchor0X, new.anchor0Y),
-//                 Point(original.anchor0X, original.anchor0Y),
-//             )
-//             assertPointsEqualish(
-//                 Point(new.anchor1X, new.anchor1Y),
-//                 Point(original.anchor1X, original.anchor1Y),
-//             )
-//         }
-
-//         // The order of the features can be different, as long as they describe the same shape
-//         assertEquals(originalPolygon.features.size, createdPolygon.features.size)
-//         assertEquals(
-//             originalPolygon.features.filterIsInstance<Feature.Corner>().size,
-//             createdPolygon.features.filterIsInstance<Feature.Corner>().size,
-//         )
-//         assertEquals(
-//             originalPolygon.features.filterIsInstance<Feature.Edge>().size,
-//             createdPolygon.features.filterIsInstance<Feature.Edge>().size,
-//         )
-//         assertTrue(
-//             createdPolygon.features.zipWithNext().all {
-//                 it.first is Feature.Edge && it.second is Feature.Corner ||
-//                     it.first is Feature.Corner && it.second is Feature.Edge
-//             }
-//         )
-//         assertTrue(
-//             createdPolygon.features.filterIsInstance<Feature.Corner>().all {
-//                 it.cubics.size == 1 && it.cubics.first().zeroLength()
-//             }
-//         )
-//     }
-
-//     @Test
-//     fun reconstructsRoundedPillStarCloseEnough() {
-//         // This test aims to ensure that our distance epsilon is not set too high that
-//         // the roundings of pill star gets pointy as they are small in the [0,1] space
-//         val originalPolygon = RoundedPolygon.pillStar(rounding = CornerRounding(0.2f))
-//         val createdPolygon =
-//             RoundedPolygon(
-//                 detectFeatures(originalPolygon.cubics),
-//                 originalPolygon.centerX,
-//                 originalPolygon.centerY,
-//             )
-
-//         assertEquals(originalPolygon.cubics.size, createdPolygon.cubics.size)
-//         // Allow up to one difference...
-//         assertEquals(abs(originalPolygon.features.size - createdPolygon.features.size), 1)
-//         // ...as long as the edge - corner pattern persists
-//         assertTrue(
-//             createdPolygon.features.zipWithNext().all {
-//                 it.first is Feature.Edge && it.second is Feature.Corner ||
-//                     it.first is Feature.Corner && it.second is Feature.Edge
-//             }
-//         )
-//     }
-// }
+extension WindowExt<T> on Iterable<T> {
+  Iterable<List<T>> window(int size, [int overlap = 0]) sync* {
+    if (size <= 0 || overlap < 0) {
+      throw ArgumentError("Size must be positive and overlap must be non-negative");
+    }
+    final iterator = this.iterator;
+    final buffer = Queue<T>();
+    while (iterator.moveNext()) {
+      buffer.addLast(iterator.current);
+      if (buffer.length == size) {
+        yield List<T>.from(buffer, growable: false);
+        for (int i = 0; i < size - overlap; i++) {
+          buffer.removeFirst();
+        }
+      }
+    }
+  }
+}
 
 /*
  * Copyright 2024 The Android Open Source Project
