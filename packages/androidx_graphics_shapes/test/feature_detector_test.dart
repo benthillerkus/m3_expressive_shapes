@@ -239,8 +239,7 @@ void main() {
               .having((it) => it.length, "length", 2)
               .having(
                 (it) =>
-                    it.first is Edge && it.last is Corner ||
-                    it.first is Corner && it.last is Edge,
+                    it.first is Edge && it.last is Corner || it.first is Corner && it.last is Edge,
                 "edge-corner pattern",
                 isTrue,
               ),

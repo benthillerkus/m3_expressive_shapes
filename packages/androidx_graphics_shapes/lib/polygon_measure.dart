@@ -141,17 +141,16 @@ class MeasuredPolygon extends DelegatingList<MeasuredCubic> {
       1,
       Iterable.generate(
         _cubics.length,
-        (index) => positiveModulo(
-          _cubics[(targetIndex + index) % _cubics.length]._endOutlineProgress - cuttingPoint,
-          1,
-        ),
+        (index) =>
+            (_cubics[(targetIndex + index) % _cubics.length]._endOutlineProgress - cuttingPoint) %
+            1,
       ),
     );
 
     // Shift the feature's outline progress too.
     final newFeatures = [
       for (final feature in features)
-        ProgressableFeature(feature.feature, positiveModulo(feature.progress - cuttingPoint, 1)),
+        ProgressableFeature(feature.feature, (feature.progress - cuttingPoint) % 1),
     ];
 
     // Filter out all empty cubics (i.e. start and end anchor are (almost) the same point.)
@@ -198,10 +197,13 @@ class MeasuredPolygon extends DelegatingList<MeasuredCubic> {
 
     final features = [
       for (final feature in featureToCubic)
-        ProgressableFeature(
-          feature.$1,
-          positiveModulo((outlineProgress[feature.$2] + outlineProgress[feature.$2 + 1]) / 2, 1),
-        ),
+        ProgressableFeature(feature.$1, () {
+          final double a = outlineProgress[feature.$2];
+          final double b = outlineProgress[feature.$2 + 1];
+          final double c = a + b;
+          final double d = c / 2;
+          return d % 1;
+        }()),
     ];
 
     return MeasuredPolygon._(measurer, features, cubics, outlineProgress);

@@ -124,9 +124,7 @@ class _MappingHelper {
     try {
       insertionIndex = mapping.map((e) => e.$1).insertionIndex(f1.progress);
     } on ArgumentError {
-      throw StateError(
-        "There can't be two features with the same progress: f1: $f1 == $f2",
-      );
+      throw StateError("There can't be two features with the same progress: f1: $f1");
     }
     final n = mapping.length;
 
@@ -157,14 +155,19 @@ class _MappingHelper {
 
 extension InsertionIndexExt<T extends Comparable<T>> on Iterable<T> {
   /// Returns the index at which the element should be inserted to keep the list sorted.
-  /// 
+  ///
   /// Throws an [ArgumentError] if [element] is already in the list.
   int insertionIndex(T element) {
     int index = 0;
     int cmp;
     for (final e in this) {
       cmp = element.compareTo(e);
-      if (cmp == 0) throw ArgumentError.value(element, "element", "Element already exists in the iterable at index $index");
+      if (cmp == 0)
+        throw ArgumentError.value(
+          element,
+          "element",
+          "Element already exists in the iterable at index $index",
+        );
       if (cmp < 0) return index;
       index++;
     }

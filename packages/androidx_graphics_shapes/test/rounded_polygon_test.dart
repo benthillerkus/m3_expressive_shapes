@@ -114,13 +114,12 @@ void main() {
       );
     });
 
-    throw UnimplementedError("Needs Shapes to be implemented");
-
-    // test("reconstructs square", () {
-    //   final base = RoundedPolygon.rectangle();
-    //   final actual = RoundedPolygon.fromFeatures(base.features);
-    //   expect(base, roundedPolygonMoreOrLessEquals(actual));
-    // });
+    test("reconstructs square", () {
+      final base = RoundedPolygon.rectangle();
+      final actual = RoundedPolygon.fromFeatures(base.features);
+      expect(base, roundedPolygonMoreOrLessEquals(actual));
+      throw UnimplementedError("Needs Shapes to be implemented");
+    });
   });
 }
 

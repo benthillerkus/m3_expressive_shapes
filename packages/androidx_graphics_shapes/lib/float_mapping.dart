@@ -26,13 +26,13 @@ double linearMap(Float32List xValues, Float32List yValues, double x) {
       .map((t) => t.$1)
       .firstWhere((it) => progressInRange(x, xValues[it], xValues[(it + 1) % xValues.length]));
   final segmentEndIndex = (segmentStartIndex + 1) % xValues.length;
-  final segmentSizeX = positiveModulo(xValues[segmentEndIndex] - xValues[segmentStartIndex], 1);
-  final segmentSizeY = positiveModulo(yValues[segmentEndIndex] - yValues[segmentStartIndex], 1);
+  final segmentSizeX = (xValues[segmentEndIndex] - xValues[segmentStartIndex]) % 1;
+  final segmentSizeY = (yValues[segmentEndIndex] - yValues[segmentStartIndex]) % 1;
   final positionInSegment = (segmentSizeX < 0.001)
       ? 0.5
-      : positiveModulo(x - xValues[segmentStartIndex], 1) / segmentSizeX;
+      : ((x - xValues[segmentStartIndex]) % 1) / segmentSizeX;
 
-  return positiveModulo(yValues[segmentStartIndex] + segmentSizeY * positionInSegment, 1);
+  return (yValues[segmentStartIndex] + segmentSizeY * positionInSegment) % 1;
 }
 
 /// DoubleMapper creates mappings from values in the
