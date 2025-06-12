@@ -2,13 +2,21 @@
 // See original license at the end of this file.
 
 import 'package:androidx_graphics_shapes/corner_rounding.dart';
+import 'package:androidx_graphics_shapes/feature_mapping.dart';
+import 'package:androidx_graphics_shapes/polygon_measure.dart';
 import 'package:androidx_graphics_shapes/rounded_polygon.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:androidx_graphics_shapes/feature_mapping.dart';
+import 'package:logging/logging.dart';
 
 import 'utils.dart';
 
 void main() {
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((record) {
+    // ignore: avoid_print
+    print(record.message);
+  });
+
   final triangleWithRoundings = RoundedPolygon.fromNumVerts(
     3,
     rounding: const CornerRounding(radius: 0.2),
@@ -18,7 +26,26 @@ void main() {
   final squareRotated = RoundedPolygon.fromNumVerts(4).ktTransformed(pointRotator(45));
 
   test('feature mapping triangles', () {
-    throw UnimplementedError("Needs MeasuredPolygon and LengthMeasurer");
+    expect(triangleWithRoundings, mappingDistance(triangle, everyElement(lessThan(.1))));
+  });
+
+  test('feature mapping triangle to square', () {
+    expect(
+      triangle,
+      mappingDistance(
+        square,
+        allOf(
+          hasLength(3),
+          isA<List<double>>()
+              .having((it) => it.first, "first", lessThan(.3))
+              .having((it) => it.last, "last", lessThan(1e-6)),
+          predicate((e) {
+            final it = e! as List<double>;
+            return closeTo(it[1], epsilon).matches(it.first, {});
+          }, "first two elements are equalish"),
+        ),
+      ),
+    );
   });
 }
 
@@ -135,9 +162,28 @@ void main() {
 //     }
 // }
 
-// Matcher verifyMapping(RoundedPolygon other, Matcher matcher) {
+/// [matcher] needs to match on a [List<double>] of distances between features of the two polygons.
+Matcher mappingDistance(RoundedPolygon other, Matcher matcher) {
+  return isA<RoundedPolygon>().having(
+    (it) {
+      final f1 = MeasuredPolygon.measurePolygon(const LengthMeasurer(), it).features;
+      final f2 = MeasuredPolygon.measurePolygon(const LengthMeasurer(), other).features;
 
-// }
+      // Maps progress in it to progress in other
+      final map = doMapping(f1, f2);
+
+      // See which features were actually mapped and the distance between their representative
+      // points
+      return map.map((entry) {
+        final feature1 = f1.firstWhere((f) => f.progress == entry.$1);
+        final feature2 = f2.firstWhere((f) => f.progress == entry.$2);
+        return featureDistSquared(feature1.feature, feature2.feature);
+      }).toList()..sort((a, b) => b.compareTo(a));
+    },
+    "distances between features of this and other polygon",
+    matcher,
+  );
+}
 
 /*
  * Copyright 2024 The Android Open Source Project

@@ -6,6 +6,7 @@ import 'package:androidx_graphics_shapes/features.dart';
 import 'package:androidx_graphics_shapes/rounded_polygon.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 const epsilon = 1e-4;
 
@@ -180,7 +181,7 @@ ktTransformResult identityTransform(double x, double y) => (x: x, y: y);
 ktTransformResult Function(double, double) pointRotator(double angle) {
   final matrix = Matrix4.rotationZ(angle);
   return (x, y) {
-    final point = matrix * [x, y, 0, 1];
+    final point = matrix * Vector4(x, y, 0, 1);
     return (x: point.x, y: point.y);
   };
 }

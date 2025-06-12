@@ -14,8 +14,8 @@ import 'package:meta/meta.dart';
 @internal
 bool progressInRange(double progress, double progressFrom, double progressTo) =>
     (progressTo >= progressFrom)
-    ? progress >= progressFrom && progress <= progressTo
-    : progress >= progressFrom || progress <= progressTo;
+    ? (progress >= progressFrom && progress <= progressTo)
+    : (progress >= progressFrom || progress <= progressTo);
 
 /// Maps from one set of progress values to another. This is used by DoubleMapper to retrieve the
 /// value on one shape that maps to the appropriate value on the other.

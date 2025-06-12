@@ -53,6 +53,7 @@ DoubleMapper featureMapper(MeasuredFeatures features1, MeasuredFeatures features
 }
 
 @internal
+@immutable
 class DistanceVertex {
   const DistanceVertex(this.distance, this.f1, this.f2);
 
@@ -79,12 +80,12 @@ List<(double, double)> doMapping(
   List<ProgressableFeature> features1,
   List<ProgressableFeature> features2,
 ) {
-  _log.fine("Shape1 progresses: ${features1.map((it) => it.progress).join()}");
-  _log.fine("Shape2 progresses: ${features2.map((it) => it.progress).join()}");
+  _log.fine("Shape1 progresses: ${features1.map((it) => it.progress).join(",")}");
+  _log.fine("Shape2 progresses: ${features2.map((it) => it.progress).join(",")}");
   final distanceVertexList = <DistanceVertex>[
     for (final f1 in features1)
       for (final f2 in features2)
-        if (featureDistSquared(f1.feature, f2.feature) case final d when d != double.maxFinite)
+        if (featureDistSquared(f1.feature, f2.feature) case final d when d != double.infinity)
           DistanceVertex(d, f1, f2),
   ]..sort((a, b) => a.distance.compareTo(b.distance));
 
@@ -126,11 +127,11 @@ class _MappingHelper {
           "There can't be two features with the same progress: f1: $f1 == $a (f2: $f2)",
         );
       }
+      insertionIndex++;
       if (f1.progress > a) {
         // We found the first element that is bigger than f1.progress, we will insert before it
         break;
       }
-      insertionIndex++;
     }
     final n = mapping.length;
 
@@ -170,7 +171,7 @@ double featureDistSquared(Feature f1, Feature f2) {
     // Simple hack to force all features to map only to features of the same concavity, by
     // returning an infinitely large distance in that case
     _log.fine("*** Feature distance ∞ for convex-vs-concave corners");
-    return double.maxFinite;
+    return double.infinity;
   }
   return (featureRepresentativePoint(f1) - featureRepresentativePoint(f2)).distanceSquared;
 }
@@ -178,9 +179,7 @@ double featureDistSquared(Feature f1, Feature f2) {
 // TODO: b/378441547 - Move to explicit parameter / expose?
 @internal
 Offset featureRepresentativePoint(Feature feature) {
-  final x = (feature.cubics.first.anchor0X + feature.cubics.last.anchor1X) / 2;
-  final y = (feature.cubics.first.anchor0Y + feature.cubics.last.anchor1Y) / 2;
-  return Offset(x, y);
+  return (feature.cubics.first.anchor0 + feature.cubics.last.anchor1) / 2;
 }
 
 final _log = Logger("FeatureMapping");

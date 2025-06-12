@@ -167,7 +167,7 @@ class MeasuredPolygon extends DelegatingList<MeasuredCubic> {
     // reference to the representative cubic we will use.
     for (final feature in polygon.features) {
       for (int cubicIndex = 0; cubicIndex < feature.cubics.length; cubicIndex++) {
-        if (feature is Corner && cubicIndex == feature.cubics.length / 2) {
+        if (feature is Corner && cubicIndex == feature.cubics.length ~/ 2) {
           featureToCubic.add((feature, cubics.length));
         }
         cubics.add(feature.cubics[cubicIndex]);
