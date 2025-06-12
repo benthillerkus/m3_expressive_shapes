@@ -192,8 +192,8 @@ class RoundedPolygon {
   Rect calculateBounds({bool approximate = true}) {
     var minX = double.infinity;
     var minY = double.infinity;
-    var maxX = double.negativeInfinity;
-    var maxY = double.negativeInfinity;
+    var maxX = double.minPositive;
+    var maxY = double.minPositive;
     for (final cubic in cubics) {
       final bounds = cubic.calculateBounds(approximate: approximate);
       minX = min(minX, bounds.left);

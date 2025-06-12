@@ -1,6 +1,8 @@
 // Ported from TestUtils.kt in https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:graphics/graphics-shapes/src/androidInstrumentedTest/kotlin/androidx/graphics/shapes/TestUtils.kt
 // See original license at the end of this file.
 
+import 'dart:math';
+
 import 'package:androidx_graphics_shapes/cubic.dart';
 import 'package:androidx_graphics_shapes/features.dart';
 import 'package:androidx_graphics_shapes/rounded_polygon.dart';
@@ -178,8 +180,9 @@ Matcher shapeListWithinBounds(Rect bounds) {
 
 ktTransformResult identityTransform(double x, double y) => (x: x, y: y);
 
+/// [angle] is the angle in degrees to rotate the point around the origin (0, 0).
 ktTransformResult Function(double, double) pointRotator(double angle) {
-  final matrix = Matrix4.rotationZ(angle);
+  final matrix = Matrix4.rotationZ(angle / 180 * pi);
   return (x, y) {
     final point = matrix * Vector4(x, y, 0, 1);
     return (x: point.x, y: point.y);

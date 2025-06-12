@@ -120,18 +120,13 @@ class _MappingHelper {
     if (_usedF1.contains(f1) || _usedF2.contains(f2)) return;
 
     // Ret is sorted, find where we need to insert this new mapping
-    int insertionIndex = 0;
-    for (final (a, _) in mapping) {
-      if (f1.progress == a) {
-        throw StateError(
-          "There can't be two features with the same progress: f1: $f1 == $a (f2: $f2)",
-        );
-      }
-      insertionIndex++;
-      if (f1.progress > a) {
-        // We found the first element that is bigger than f1.progress, we will insert before it
-        break;
-      }
+    final int insertionIndex;
+    try {
+      insertionIndex = mapping.map((e) => e.$1).insertionIndex(f1.progress);
+    } on ArgumentError {
+      throw StateError(
+        "There can't be two features with the same progress: f1: $f1 == $f2",
+      );
     }
     final n = mapping.length;
 
@@ -157,6 +152,23 @@ class _MappingHelper {
     mapping.insert(insertionIndex, (f1.progress, f2.progress));
     _usedF1.add(f1);
     _usedF2.add(f2);
+  }
+}
+
+extension InsertionIndexExt<T extends Comparable<T>> on Iterable<T> {
+  /// Returns the index at which the element should be inserted to keep the list sorted.
+  /// 
+  /// Throws an [ArgumentError] if [element] is already in the list.
+  int insertionIndex(T element) {
+    int index = 0;
+    int cmp;
+    for (final e in this) {
+      cmp = element.compareTo(e);
+      if (cmp == 0) throw ArgumentError.value(element, "element", "Element already exists in the iterable at index $index");
+      if (cmp < 0) return index;
+      index++;
+    }
+    return index;
   }
 }
 
