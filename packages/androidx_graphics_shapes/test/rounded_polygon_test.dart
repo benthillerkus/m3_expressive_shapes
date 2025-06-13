@@ -118,7 +118,107 @@ void main() {
       final base = RoundedPolygon.rectangle();
       final actual = RoundedPolygon.fromFeatures(base.features);
       expect(base, roundedPolygonMoreOrLessEquals(actual));
-      throw UnimplementedError("Needs Shapes to be implemented");
+    });
+
+    test("reconstructs rounded square", () {
+      final base = RoundedPolygon.rectangle(
+        rounding: const CornerRounding(radius: 0.5, smoothing: 0.2),
+      );
+      final actual = RoundedPolygon.fromFeatures(base.features);
+      expect(base, roundedPolygonMoreOrLessEquals(actual));
+    });
+
+    test("reconstructs circles", () {
+      for (var i = 3; i <= 20; i++) {
+        final base = RoundedPolygon.circle(numVertices: i);
+        final actual = RoundedPolygon.fromFeatures(base.features);
+        expect(base, roundedPolygonMoreOrLessEquals(actual));
+      }
+    });
+
+    test("reconstructs stars", () {
+      for (var i = 3; i <= 20; i++) {
+        final base = RoundedPolygon.star(i);
+        final actual = RoundedPolygon.fromFeatures(base.features);
+        expect(base, roundedPolygonMoreOrLessEquals(actual));
+      }
+    });
+
+    test("reconstructs rounded stars", () {
+      for (var i = 3; i <= 20; i++) {
+        final base = RoundedPolygon.star(
+          i,
+          rounding: const CornerRounding(radius: 0.5, smoothing: 0.2),
+        );
+        final actual = RoundedPolygon.fromFeatures(base.features);
+        expect(base, roundedPolygonMoreOrLessEquals(actual));
+      }
+    });
+
+    test("reconstructs pill", () {
+      final base = RoundedPolygon.pill();
+      final actual = RoundedPolygon.fromFeatures(base.features);
+      expect(base, roundedPolygonMoreOrLessEquals(actual));
+    });
+
+    test("reconstructs pill star", () {
+      final base = RoundedPolygon.pillStar(
+        rounding: const CornerRounding(radius: 0.5, smoothing: 0.2),
+      );
+      final actual = RoundedPolygon.fromFeatures(base.features);
+      expect(base, roundedPolygonMoreOrLessEquals(actual));
+    });
+  });
+
+  test("compute center", () {
+    final polygon = RoundedPolygon.fromVertices(
+      Float32List.fromList(const [0, 0, 1, 0, 0, 1, 1, 1]),
+    );
+    expect(polygon.centerX, closeTo(0.5, 1e-4));
+    expect(polygon.centerY, closeTo(0.5, 1e-4));
+  });
+
+  test("rounding space usage", () {
+    const p0 = Offset.zero;
+    const p1 = Offset(1, 0);
+    const p2 = Offset(0.5, 1);
+    const pvRounding = [
+      CornerRounding(radius: 1, smoothing: 0),
+      CornerRounding(radius: 1, smoothing: 1),
+      CornerRounding.unrounded,
+    ];
+    final polygon = RoundedPolygon.fromVertices(
+      Float32List.fromList([p0.dx, p0.dy, p1.dx, p1.dy, p2.dx, p2.dy]),
+      perVertexRounding: pvRounding,
+    );
+
+    // Since there is not enough room in the p0 -> p1 side even for the roundings, we shouldn't
+    // take smoothing into account, so the corners should end in the middle point.
+    final lowerEdgeFeature = polygon.features.firstWhere((f) => f is Edge) as Edge;
+    expect(lowerEdgeFeature.cubics, hasLength(1));
+
+    final lowerEdge = lowerEdgeFeature.cubics.first;
+    expect(lowerEdge.anchor0X, closeTo(0.5, epsilon));
+    expect(lowerEdge.anchor0Y, closeTo(0.0, epsilon));
+    expect(lowerEdge.anchor1X, closeTo(0.5, epsilon));
+    expect(lowerEdge.anchor1Y, closeTo(0.0, epsilon));
+  });
+
+  /*
+     * In the following tests, we check how much was cut for the top left (vertex 0) and bottom
+     * left corner (vertex 3).
+     * In particular, both vertex are competing for space in the left side.
+     *
+     *   Vertex 0            Vertex 1
+     *      *---------------------*
+     *      |                     |
+     *      *---------------------*
+     *   Vertex 3            Vertex 2
+     */
+  group("uneven smoothing", () {
+    const points = 20;
+    test("1", () {
+      throw UnimplementedError("Test not implemented yet");
     });
   });
 }
