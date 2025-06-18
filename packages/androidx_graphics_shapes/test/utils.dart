@@ -201,6 +201,78 @@ ktTransformResult Function(double, double) translateTransform(double dx, double 
   };
 }
 
+class MatcherBuilder extends Matcher {
+  MatcherBuilder(this.builder);
+
+  Matcher Function(Object? item) builder;
+
+  @override
+  Description describe(Description description) => description;
+
+  @override
+  bool matches(item, Map<dynamic, dynamic> matchState) {
+    final matcher = builder(item);
+    return matcher.matches(item, matchState..[(#generatedMatcher, item)] = matcher);
+  }
+
+  @override
+  Description describeMismatch(
+    item,
+    Description mismatchDescription,
+    Map<dynamic, dynamic> matchState,
+    bool verbose,
+  ) {
+    final matcher = matchState[(#generatedMatcher, item)] as Matcher;
+    return matcher.describeMismatch(item, mismatchDescription, matchState, verbose);
+  }
+}
+
+class _TypeMatcher<T> implements TypeMatcher<T> {
+  _TypeMatcher(this.matcher);
+
+  final Matcher matcher;
+
+  @override
+  Description describe(Description description) {
+    return matcher.describe(description);
+  }
+
+  @override
+  Description describeMismatch(
+    item,
+    Description mismatchDescription,
+    Map<dynamic, dynamic> matchState,
+    bool verbose,
+  ) {
+    return matcher.describeMismatch(item, mismatchDescription, matchState, verbose);
+  }
+
+  @override
+  TypeMatcher<T> having(Object? Function(T p1) feature, String description, matcher) {
+    throw UnimplementedError();
+  }
+
+  @override
+  bool matches(Object? item, Map<dynamic, dynamic> matchState) => matcher.matches(item, matchState);
+}
+
+extension on Matcher {
+  TypeMatcher<T> cast<T>() => _TypeMatcher<T>(this);
+}
+
+extension MatcherBuilderExtension<T> on TypeMatcher<T> {
+  /// Builds a [Matcher] using the provided [builder] function.
+  ///
+  /// The [builder] function receives the [item] being matched and returns a [TypeMatcher].
+  TypeMatcher<T> build(Matcher Function(T item) builder) {
+    return MatcherBuilder((a) => allOf(this, builder(a as T))).cast<T>();
+  }
+
+    TypeMatcher<T> derive(Matcher Function(T item, TypeMatcher<T> matcher) builder) {
+    return MatcherBuilder((a) => builder(a as T, this)).cast<T>();
+  }
+}
+
 // internal fun assertBitmapsEqual(b0: Bitmap, b1: Bitmap) {
 //     assertEquals(b0.width, b1.width)
 //     assertEquals(b0.height, b1.height)

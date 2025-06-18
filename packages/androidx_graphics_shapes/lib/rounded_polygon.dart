@@ -13,6 +13,7 @@ import 'package:meta/meta.dart';
 import 'corner_rounding.dart';
 import 'cubic.dart';
 import 'features.dart';
+import 'polygon_validation.dart';
 import 'shapes.dart';
 
 final Logger _log = Logger("RoundedPolygon");
@@ -40,6 +41,10 @@ class RoundedPolygon {
       }
       prevCubic = cubic;
     }
+  }
+
+  factory RoundedPolygon.fix(RoundedPolygon polygon) {
+    return PolygonValidator.fix(polygon);
   }
 
   final List<Feature> features;
