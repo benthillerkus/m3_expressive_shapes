@@ -21,8 +21,7 @@ extension OffsetExt on Offset {
   Offset normalize() => this / distance;
 
   Offset ktTransformed(ktPointTransformer f) {
-    final (:x, :y) = f(dx, dy);
-    return Offset(x, y);
+    return f(dx, dy);
   }
 }
 

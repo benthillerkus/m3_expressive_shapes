@@ -150,7 +150,7 @@ class RoundedPolygon {
     // Center the shape if bounds are not a square
     final offsetX = (side - width) / 2 - bounds.left;
     final offsetY = (side - height) / 2 - bounds.top;
-    return ktTransformed((x, y) => (x: (x + offsetX) / side, y: (y + offsetY) / side));
+    return ktTransformed((x, y) => Offset((x + offsetX) / side, (y + offsetY) / side));
   }
 
   @override

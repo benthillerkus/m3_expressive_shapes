@@ -178,26 +178,26 @@ Matcher shapeListWithinBounds(Rect bounds) {
   );
 }
 
-ktTransformResult identityTransform(double x, double y) => (x: x, y: y);
+Offset identityTransform(double x, double y) => Offset(x, y);
 
 /// [angle] is the angle in degrees to rotate the point around the origin (0, 0).
-ktTransformResult Function(double, double) pointRotator(double angle) {
+Offset Function(double, double) pointRotator(double angle) {
   final matrix = Matrix4.rotationZ(angle / 180 * pi);
   return (x, y) {
     final point = matrix * Vector4(x, y, 0, 1);
-    return (x: point.x, y: point.y);
+    return Offset(point.x as double, point.y as double);
   };
 }
 
-ktTransformResult Function(double, double) scaleTransform(double sx, double sy) {
+Offset Function(double, double) scaleTransform(double sx, double sy) {
   return (x, y) {
-    return (x: x * sx, y: y * sy);
+    return Offset(x * sx, y * sy);
   };
 }
 
-ktTransformResult Function(double, double) translateTransform(double dx, double dy) {
+Offset Function(double, double) translateTransform(double dx, double dy) {
   return (x, y) {
-    return (x: x + dx, y: y + dy);
+    return Offset(x + dx, y + dy);
   };
 }
 

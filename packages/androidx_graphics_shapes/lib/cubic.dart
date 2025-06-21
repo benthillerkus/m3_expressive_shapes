@@ -2,7 +2,6 @@
 // See original license at the end of this file.
 
 import 'dart:math';
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:androidx_graphics_shapes/utils.dart';
@@ -417,20 +416,20 @@ final class Cubic2D extends Curve2D {
     switch (ix) {
       case 0:
         final r = f(anchor0X, anchor0Y);
-        anchor0X = r.x;
-        anchor0Y = r.y;
+        anchor0X = r.dx;
+        anchor0Y = r.dy;
       case 2:
         final r = f(control0X, control0Y);
-        control0X = r.x;
-        control0Y = r.y;
+        control0X = r.dx;
+        control0Y = r.dy;
       case 4:
         final r = f(control1X, control1Y);
-        control1X = r.x;
-        control1Y = r.y;
+        control1X = r.dx;
+        control1Y = r.dy;
       case 6:
         final r = f(anchor1X, anchor1Y);
-        anchor1X = r.x;
-        anchor1Y = r.y;
+        anchor1X = r.dx;
+        anchor1Y = r.dy;
       default:
         throw ArgumentError("Invalid index $ix for Cubic2D transform");
     }
@@ -445,14 +444,14 @@ final class Cubic2D extends Curve2D {
     final b = f(control0X, control0Y);
     final c = f(control1X, control1Y);
     final d = f(anchor1X, anchor1Y);
-    anchor0X = a.x;
-    anchor0Y = a.y;
-    control0X = b.x;
-    control0Y = b.y;
-    control1X = c.x;
-    control1Y = c.y;
-    anchor1X = d.x;
-    anchor1Y = d.y;
+    anchor0X = a.dx;
+    anchor0Y = a.dy;
+    control0X = b.dx;
+    control0Y = b.dy;
+    control1X = c.dx;
+    control1Y = c.dy;
+    anchor1X = d.dx;
+    anchor1Y = d.dy;
   }
 
   factory Cubic2D.lerp(Cubic2D c1, Cubic2D c2, double t) {
@@ -471,13 +470,11 @@ final class Cubic2D extends Curve2D {
   }
 }
 
-typedef ktTransformResult = ({double x, double y});
-
 /// Interface for a function that can transform (rotate/scale/translate/etc.) points.
 ///
 /// Transform the point given the x and y parameters, returning the transformed point as a
 /// [ktTransformResult]
-typedef ktPointTransformer = ktTransformResult Function(double x, double y);
+typedef ktPointTransformer = Offset Function(double x, double y);
 
 /*
  * Copyright 2022 The Android Open Source Project
