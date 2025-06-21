@@ -13,7 +13,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'utils.dart';
 
 void main() {
-  const rounding = CornerRounding(radius: .1);
+  const rounding = CornerRounding(.1);
   const perVtxRounded = [rounding, rounding, rounding, rounding];
 
   group("num verts constructor", () {
@@ -121,9 +121,7 @@ void main() {
     });
 
     test("reconstructs rounded square", () {
-      final base = RoundedPolygon.rectangle(
-        rounding: const CornerRounding(radius: 0.5, smoothing: 0.2),
-      );
+      final base = RoundedPolygon.rectangle(rounding: const CornerRounding(0.5, smoothing: 0.2));
       final actual = RoundedPolygon.fromFeatures(base.features);
       expect(base, roundedPolygonMoreOrLessEquals(actual));
     });
@@ -146,10 +144,7 @@ void main() {
 
     test("reconstructs rounded stars", () {
       for (var i = 3; i <= 20; i++) {
-        final base = RoundedPolygon.star(
-          i,
-          rounding: const CornerRounding(radius: 0.5, smoothing: 0.2),
-        );
+        final base = RoundedPolygon.star(i, rounding: const CornerRounding(0.5, smoothing: 0.2));
         final actual = RoundedPolygon.fromFeatures(base.features);
         expect(base, roundedPolygonMoreOrLessEquals(actual));
       }
@@ -162,9 +157,7 @@ void main() {
     });
 
     test("reconstructs pill star", () {
-      final base = RoundedPolygon.pillStar(
-        rounding: const CornerRounding(radius: 0.5, smoothing: 0.2),
-      );
+      final base = RoundedPolygon.pillStar(rounding: const CornerRounding(0.5, smoothing: 0.2));
       final actual = RoundedPolygon.fromFeatures(base.features);
       expect(base, roundedPolygonMoreOrLessEquals(actual));
     });
@@ -183,8 +176,8 @@ void main() {
     const p1 = Offset(1, 0);
     const p2 = Offset(0.5, 1);
     const pvRounding = [
-      CornerRounding(radius: 1, smoothing: 0),
-      CornerRounding(radius: 1, smoothing: 1),
+      CornerRounding(1, smoothing: 0),
+      CornerRounding(1, smoothing: 1),
       CornerRounding.unrounded,
     ];
     final polygon = RoundedPolygon.fromVertices(
@@ -223,7 +216,7 @@ void main() {
       for (var i = 0; i <= points; i++) {
         final smooth = i / points;
         expect(
-          CornerRounding(radius: 0.4, smoothing: smooth),
+          CornerRounding(0.4, smoothing: smooth),
           withUnevenSmoothing(
             expectedV0SX: 0.4 * (1 + smooth),
             expectedV0SY: (0.4 * (1 + smooth)).clamp(0, 0.5),
@@ -247,12 +240,12 @@ void main() {
         // There is 0.4f room for smoothing
         final factor = (0.4 / (smoothWantedV0 + smoothWantedV3)).clamp(0, 1);
         expect(
-          CornerRounding(radius: 0.4, smoothing: smooth),
+          CornerRounding(0.4, smoothing: smooth),
           withUnevenSmoothing(
             expectedV0SX: 0.4 * (1 + smooth),
             expectedV0SY: 0.4 + factor * smoothWantedV0,
             expectedV3SY: 0.2 + factor * smoothWantedV3,
-            rounding3: const CornerRounding(radius: 0.2, smoothing: 1),
+            rounding3: const CornerRounding(0.2, smoothing: 1),
           ),
           reason: "smooth = $smooth",
         );
@@ -268,12 +261,12 @@ void main() {
         final smooth = i / points;
 
         expect(
-          CornerRounding(radius: 0.4, smoothing: smooth),
+          CornerRounding(0.4, smoothing: smooth),
           withUnevenSmoothing(
             expectedV0SX: 0.4 * (1 + smooth),
             expectedV0SY: 0.4,
             expectedV3SY: 0.6,
-            rounding3: const CornerRounding(radius: 0.6),
+            rounding3: const CornerRounding(0.6),
           ),
           reason: "smooth = $smooth",
         );
@@ -291,8 +284,8 @@ void main() {
       4,
       radius: radius,
       innerRadius: innerRadius,
-      rounding: const CornerRounding(radius: radius * roundingFactor),
-      innerRounding: const CornerRounding(radius: radius * roundingFactor),
+      rounding: const CornerRounding(radius * roundingFactor),
+      innerRounding: const CornerRounding(radius * roundingFactor),
       centerX: radius,
       centerY: radius,
     ).ktTransformed((x, y) => Offset((x - radius) / radius, (y - radius) / radius));
@@ -301,8 +294,8 @@ void main() {
       4,
       radius: 1,
       innerRadius: innerRadiusFactor,
-      rounding: const CornerRounding(radius: roundingFactor),
-      innerRounding: const CornerRounding(radius: roundingFactor),
+      rounding: const CornerRounding(roundingFactor),
+      innerRounding: const CornerRounding(roundingFactor),
     );
 
     final cubics = canonicalShape.cubics;
@@ -315,7 +308,7 @@ Matcher withUnevenSmoothing({
   required double expectedV0SX,
   required double expectedV0SY,
   required double expectedV3SY,
-  CornerRounding rounding3 = const CornerRounding(radius: .5),
+  CornerRounding rounding3 = const CornerRounding(.5),
 }) {
   const p0 = Offset.zero;
   const p1 = Offset(5, 0);

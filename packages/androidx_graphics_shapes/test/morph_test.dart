@@ -32,7 +32,10 @@ void main() {
     expect(
       cubics11,
       everyElement(
-        isA<Cubic2D>().changeContext((cubic) => anyElement(cubic2DMoreOrLessEquals(cubic)), p1Cubics),
+        isA<Cubic2D>().changeContext(
+          (cubic) => anyElement(cubic2DMoreOrLessEquals(cubic)),
+          p1Cubics,
+        ),
       ),
     );
   });

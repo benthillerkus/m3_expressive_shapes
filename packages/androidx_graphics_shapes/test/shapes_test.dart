@@ -76,8 +76,8 @@ void main() {
   });
 
   group("rounded star tests", () {
-    final rounding = const CornerRounding(radius: 0.1);
-    final innerRounding = const CornerRounding(radius: 0.2);
+    final rounding = const CornerRounding(0.1);
+    final innerRounding = const CornerRounding(0.2);
     final perVertexRounded = [
       rounding,
       innerRounding,

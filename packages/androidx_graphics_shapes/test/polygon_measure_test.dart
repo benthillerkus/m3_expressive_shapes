@@ -28,21 +28,15 @@ void main() {
   test("measure sharp icosagon", () => regularPolygonMeasure(20));
 
   test("measure slightly rounded hesagon", () {
-    irregularPolygonMeasure(
-      RoundedPolygon.fromNumVerts(6, rounding: const CornerRounding(radius: .15)),
-    );
+    irregularPolygonMeasure(RoundedPolygon.fromNumVerts(6, rounding: const CornerRounding(.15)));
   });
 
   test("measure medium rounded hexagon", () {
-    irregularPolygonMeasure(
-      RoundedPolygon.fromNumVerts(6, rounding: const CornerRounding(radius: .5)),
-    );
+    irregularPolygonMeasure(RoundedPolygon.fromNumVerts(6, rounding: const CornerRounding(.5)));
   });
 
   test("measure maximum rounded hexagon", () {
-    irregularPolygonMeasure(
-      RoundedPolygon.fromNumVerts(6, rounding: const CornerRounding(radius: 1)),
-    );
+    irregularPolygonMeasure(RoundedPolygon.fromNumVerts(6, rounding: const CornerRounding(1)));
   });
 
   test("measure circle", () {
@@ -62,10 +56,10 @@ void main() {
       RoundedPolygon.fromVertices(
         Float32List.fromList([0, -1, 1, 1, 0, 0.5, -1, 1]),
         perVertexRounding: [
-          const CornerRounding(radius: .2, smoothing: .5),
-          const CornerRounding(radius: .2, smoothing: .5),
-          const CornerRounding(radius: .4, smoothing: 0),
-          const CornerRounding(radius: .2, smoothing: .5),
+          const CornerRounding(.2, smoothing: .5),
+          const CornerRounding(.2, smoothing: .5),
+          const CornerRounding(.4, smoothing: 0),
+          const CornerRounding(.2, smoothing: .5),
         ],
       ),
     );
@@ -78,7 +72,7 @@ void main() {
         perVertexRounding: [
           CornerRounding.unrounded,
           CornerRounding.unrounded,
-          const CornerRounding(radius: .5, smoothing: .5),
+          const CornerRounding(.5, smoothing: .5),
           CornerRounding.unrounded,
         ],
       ),

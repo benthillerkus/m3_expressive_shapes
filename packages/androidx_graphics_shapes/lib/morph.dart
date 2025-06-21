@@ -230,10 +230,9 @@ class Morph {
       // Progresses are in shape1's perspective
       // b1a, b2a are ending progress values of current measured cubics in [0,1] range
       final b1a = (i1 == bs1.length) ? 1.0 : b1.endOutlineProgress;
-      final b2a =
-          (i2 == bs2.length)
-              ? 1.0
-              : doubleMapper.mapBack((b2.endOutlineProgress + polygon2CutPoint) % 1.0);
+      final b2a = (i2 == bs2.length)
+          ? 1.0
+          : doubleMapper.mapBack((b2.endOutlineProgress + polygon2CutPoint) % 1.0);
       final minb = min(b1a, b2a);
       _log.fine("$b1a $b2a | $minb");
       // min b is the progress at which the curve that ends first ends.

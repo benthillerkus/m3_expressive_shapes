@@ -44,7 +44,7 @@ RoundedPolygon circle({
 
   return RoundedPolygon.fromNumVerts(
     numVertices,
-    rounding: CornerRounding(radius: radius),
+    rounding: CornerRounding(radius),
     radius: polygonRadius,
     centerX: centerX,
     centerY: centerY,
@@ -213,7 +213,7 @@ RoundedPolygon pill({
       wHalf + centerX,
       -hHalf + centerY,
     ]),
-    rounding: CornerRounding(radius: min(wHalf, hHalf), smoothing: smoothing),
+    rounding: CornerRounding(min(wHalf, hHalf), smoothing: smoothing),
     centerX: centerX,
     centerY: centerY,
   );

@@ -13,10 +13,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'utils.dart';
 
 void main() {
-  final triangleWithRoundings = RoundedPolygon.fromNumVerts(
-    3,
-    rounding: const CornerRounding(radius: 0.2),
-  );
+  final triangleWithRoundings = RoundedPolygon.fromNumVerts(3, rounding: const CornerRounding(0.2));
   final triangle = RoundedPolygon.fromNumVerts(3);
   final square = RoundedPolygon.fromNumVerts(4);
   final squareRotated = RoundedPolygon.fromNumVerts(4).ktTransformed(pointRotator(45));
@@ -109,7 +106,7 @@ void main() {
     final verySunny = RoundedPolygon.star(
       8,
       innerRadius: .65,
-      rounding: const CornerRounding(radius: .15),
+      rounding: const CornerRounding(.15),
     ).normalized();
 
     expect(

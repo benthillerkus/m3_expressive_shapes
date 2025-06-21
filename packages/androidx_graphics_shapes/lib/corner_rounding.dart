@@ -15,7 +15,7 @@
 ///   0 (no smoothing) meaning that it is purely a circular curve and a value of 1 meaning that the
 ///   flanking curves are maximized between the inner curve and the edges. </em>
 class CornerRounding {
-  const CornerRounding({this.radius = 0, this.smoothing = 0})
+  const CornerRounding(this.radius, {this.smoothing = 0})
     : assert(radius >= 0 && smoothing >= 0 && smoothing <= 1);
 
   /// A value of 0 or greater, representing the radius of the circle which defines the
@@ -42,7 +42,7 @@ class CornerRounding {
   final double smoothing;
 
   /// [Unrounded] has a rounding radius of zero, producing a sharp corner at a vertex.
-  static const unrounded = CornerRounding();
+  static const unrounded = CornerRounding(0);
 }
 
 /*

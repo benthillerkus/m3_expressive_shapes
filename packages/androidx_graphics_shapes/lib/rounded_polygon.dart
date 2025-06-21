@@ -656,17 +656,16 @@ class _RoundedCorner {
       circleCenter: center,
       actualR: actualR,
     );
-    final flanking2 =
-        _computeFlankingCurve(
-          actualRoundCut: actualRoundCut,
-          actualSmoothingValues: actualSmoothing1,
-          corner: p1,
-          sideStart: p2,
-          circleSegmentIntersection: circleIntersection2,
-          otherCircleSegmentIntersection: circleIntersection0,
-          circleCenter: center,
-          actualR: actualR,
-        ).reverse();
+    final flanking2 = _computeFlankingCurve(
+      actualRoundCut: actualRoundCut,
+      actualSmoothingValues: actualSmoothing1,
+      corner: p1,
+      sideStart: p2,
+      circleSegmentIntersection: circleIntersection2,
+      otherCircleSegmentIntersection: circleIntersection0,
+      circleCenter: center,
+      actualR: actualR,
+    ).reverse();
     return [
       flanking0,
       Cubic2D.circularArc(
@@ -728,12 +727,11 @@ class _RoundedCorner {
     // We use an approximation to cut a part of the circle section proportional to 1 - smooth,
     // When smooth = 0, we take the full section, when smooth = 1, we take nothing.
     // TODO: revisit this, it can be problematic as it approaches 180 degrees
-    final p =
-        Offset.lerp(
-          circleSegmentIntersection,
-          (circleSegmentIntersection + otherCircleSegmentIntersection) / 2.0,
-          actualSmoothingValues,
-        )!;
+    final p = Offset.lerp(
+      circleSegmentIntersection,
+      (circleSegmentIntersection + otherCircleSegmentIntersection) / 2.0,
+      actualSmoothingValues,
+    )!;
     // The flanking curve ends on the circle
     final curveEnd =
         circleCenter + Offset(p.dx - circleCenter.dx, p.dy - circleCenter.dy).normalize() * actualR;

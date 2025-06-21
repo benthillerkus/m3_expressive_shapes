@@ -218,7 +218,7 @@ void main() {
     test("reconstructs rounded pill star close enough", () {
       // This test aims to ensure that our distance epsilon is not set too high that
       // the roundings of pill star gets pointy as they are small in the [0,1] space
-      final originalPolygon = RoundedPolygon.pillStar(rounding: const CornerRounding(radius: 0.2));
+      final originalPolygon = RoundedPolygon.pillStar(rounding: const CornerRounding(0.2));
       final createdPolygon = RoundedPolygon.fromFeatures(
         detectFeatures(originalPolygon.cubics),
         centerX: originalPolygon.centerX,

@@ -49,13 +49,10 @@ void main() {
   });
 
   test('fixes anti-clockwise oriented rounded polygon', () {
-    final valid = RoundedPolygon.fromVertices(
-      pentagonPoints,
-      rounding: const CornerRounding(radius: 0.5),
-    );
+    final valid = RoundedPolygon.fromVertices(pentagonPoints, rounding: const CornerRounding(0.5));
     final broken = RoundedPolygon.fromVertices(
       reverseOrientedPentagonPoints,
-      rounding: const CornerRounding(radius: 0.5),
+      rounding: const CornerRounding(0.5),
     );
 
     expect(broken, fixes(valid));
