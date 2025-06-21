@@ -162,12 +162,13 @@ extension InsertionIndexExt<T extends Comparable<T>> on Iterable<T> {
     int cmp;
     for (final e in this) {
       cmp = element.compareTo(e);
-      if (cmp == 0)
+      if (cmp == 0) {
         throw ArgumentError.value(
           element,
           "element",
           "Element already exists in the iterable at index $index",
         );
+      }
       if (cmp < 0) return index;
       index++;
     }

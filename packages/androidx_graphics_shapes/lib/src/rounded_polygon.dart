@@ -422,8 +422,9 @@ class RoundedPolygon {
         "RoundedPolygon must have at least 2 features",
       );
     }
-    if (!centerX.isNaN && !centerY.isNaN)
+    if (!centerX.isNaN && !centerY.isNaN) {
       return RoundedPolygon._(features, Offset(centerX, centerY));
+    }
 
     final vertices = <double>[];
     for (final feature in features) {
