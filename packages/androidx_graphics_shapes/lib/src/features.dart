@@ -128,8 +128,7 @@ class Edge extends Feature {
   const Edge(super.cubics);
 
   @override
-  Edge moved(OffsetMover f) =>
-      Edge([for (final cubic in cubics) cubic.moved(f)]);
+  Edge moved(OffsetMover f) => Edge([for (final cubic in cubics) cubic.moved(f)]);
 
   @override
   Edge reversed() {
