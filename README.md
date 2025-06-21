@@ -2,11 +2,11 @@
 
 ## m3_expressive_shapes
 
-A Flutter port of the morphing shapes from Android's implementation Material 3 _Expressive_.
+A Flutter port of the morphing shapes from Android's implementation of Material 3 _Expressive_.
 
 This repository has two packages:
 - [androidx_graphics_shapes](packages/androidx_graphics_shapes) with a port of the underlying library
-- and [m3_expressive_shapes](packages/m3_expressive_shapes) with presets for the _expressive_ shapes from the Material Design specification.
+- and [m3_expressive_shapes](packages/m3_expressive_shapes) with presets for the [shape set from the Material Design specification](https://m3.material.io/styles/shape/overview-principles#1e5ec5be-a651-43c3-9fb2-dc9668a5f424).
 
 ## Alternative
 
