@@ -268,8 +268,53 @@ extension MatcherBuilderExtension<T> on TypeMatcher<T> {
     return MatcherBuilder((a) => allOf(this, builder(a as T))).cast<T>();
   }
 
-    TypeMatcher<T> derive(Matcher Function(T item, TypeMatcher<T> matcher) builder) {
+  TypeMatcher<T> derive(Matcher Function(T item, TypeMatcher<T> matcher) builder) {
     return MatcherBuilder((a) => builder(a as T, this)).cast<T>();
+  }
+}
+
+/// A [Matcher] that creates a new [Matcher] based on the provided [matcherBuilder] function,
+/// using the actual, discriminated value as the input to the builder.
+///
+/// This matcher is then being matched against the [newContext].
+class ChangeContextMatcher<T> extends TypeMatcher<T> {
+  ChangeContextMatcher(this.matcherBuilder, this.newContext);
+
+  final Matcher Function(T actual) matcherBuilder;
+  final Object? newContext;
+
+  @override
+  Description describe(Description description) {
+    return description.add("creates a matcher that matches with ").addDescriptionOf(newContext);
+  }
+
+  @override
+  Description describeMismatch(
+    item,
+    Description mismatchDescription,
+    Map<dynamic, dynamic> matchState,
+    bool verbose,
+  ) {
+    final matcher = matchState["matcher"] as Matcher;
+    return matcher.describeMismatch(newContext, mismatchDescription, matchState, verbose);
+  }
+
+  @override
+  bool matches(item, Map<dynamic, dynamic> matchState) {
+    final matcher = matcherBuilder(item as T);
+    addStateInfo(matchState, {"matcher": matcher});
+    return matcher.matches(newContext, matchState);
+  }
+}
+
+extension ChangeContextMatcherExtension<T> on TypeMatcher<T> {
+  /// Creates a [ChangeContextMatcher] that uses the provided [matcherBuilder] to create a new
+  /// matcher based on the actual value, and matches it against the [newContext].
+  ChangeContextMatcher<T> changeContext(
+    Matcher Function(T actual) matcherBuilder,
+    Object? newContext,
+  ) {
+    return ChangeContextMatcher(matcherBuilder, newContext);
   }
 }
 

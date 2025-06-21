@@ -455,17 +455,19 @@ final class Cubic2D extends Curve2D {
     anchor1Y = d.y;
   }
 
-  Cubic2D lerp(Cubic2D c1, Cubic2D c2, double t) {
-    return Cubic2D(
-      lerpDouble(c1.anchor0X, c2.anchor0X, t)!,
-      lerpDouble(c1.anchor0Y, c2.anchor0Y, t)!,
-      lerpDouble(c1.control0X, c2.control0X, t)!,
-      lerpDouble(c1.control0Y, c2.control0Y, t)!,
-      lerpDouble(c1.control1X, c2.control1X, t)!,
-      lerpDouble(c1.control1Y, c2.control1Y, t)!,
-      lerpDouble(c1.anchor1X, c2.anchor1X, t)!,
-      lerpDouble(c1.anchor1Y, c2.anchor1Y, t)!,
-    );
+  factory Cubic2D.lerp(Cubic2D c1, Cubic2D c2, double t) {
+    return Cubic2D.empty(0, 0)..lerpInto(c1, c2, t);
+  }
+
+  void lerpInto(Cubic2D from, Cubic2D to, double t) {
+    anchor0X = from.anchor0X * (1.0 - t) + to.anchor0X * t;
+    anchor0Y = from.anchor0Y * (1.0 - t) + to.anchor0Y * t;
+    control0X = from.control0X * (1.0 - t) + to.control0X * t;
+    control0Y = from.control0Y * (1.0 - t) + to.control0Y * t;
+    control1X = from.control1X * (1.0 - t) + to.control1X * t;
+    control1Y = from.control1Y * (1.0 - t) + to.control1Y * t;
+    anchor1X = from.anchor1X * (1.0 - t) + to.anchor1X * t;
+    anchor1Y = from.anchor1Y * (1.0 - t) + to.anchor1Y * t;
   }
 }
 
