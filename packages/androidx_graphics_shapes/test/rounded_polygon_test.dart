@@ -288,7 +288,7 @@ void main() {
       innerRounding: const CornerRounding(radius * roundingFactor),
       centerX: radius,
       centerY: radius,
-    ).ktTransformed((x, y) => Offset((x - radius) / radius, (y - radius) / radius));
+    ).moved((x, y) => Offset((x - radius) / radius, (y - radius) / radius));
 
     final canonicalShape = RoundedPolygon.star(
       4,

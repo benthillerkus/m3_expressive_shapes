@@ -313,11 +313,11 @@ final class Cubic2D extends Curve2D {
     anchor1Y,
   );
 
-  /// Transforms the points in this [Cubic] with the given [PointTransformer] and returns a new
+  /// Transforms the points in this [Cubic] with the given [OffsetMover] and returns a new
   /// [Cubic]
   ///
-  /// @param f The [PointTransformer] used to [ktTransform] this [Cubic]
-  Cubic2D ktTransformed(PointTransformer f) {
+  /// @param f The [OffsetMover] used to [move] this [Cubic]
+  Cubic2D moved(OffsetMover f) {
     return Cubic2D(
       anchor0X,
       anchor0Y,
@@ -327,7 +327,7 @@ final class Cubic2D extends Curve2D {
       control1Y,
       anchor1X,
       anchor1Y,
-    )..ktTransform(f);
+    )..move(f);
   }
 
   Cubic2D copyWith({
@@ -412,7 +412,7 @@ final class Cubic2D extends Curve2D {
   @internal
   Cubic2D.empty(double x0, double y0) : this(x0, y0, x0, y0, x0, y0, x0, y0);
 
-  void ktTransformOnePoint(PointTransformer f, int ix) {
+  void moveOnePoint(OffsetMover f, int ix) {
     switch (ix) {
       case 0:
         final r = f(anchor0X, anchor0Y);
@@ -439,7 +439,7 @@ final class Cubic2D extends Curve2D {
   /// [PointTransformer] [f].
   ///
   /// Not to be confused with [transform] which maps the parameter t to a point on the curve.
-  void ktTransform(PointTransformer f) {
+  void move(OffsetMover f) {
     final a = f(anchor0X, anchor0Y);
     final b = f(control0X, control0Y);
     final c = f(control1X, control1Y);
@@ -473,8 +473,8 @@ final class Cubic2D extends Curve2D {
 /// Interface for a function that can transform (rotate/scale/translate/etc.) points.
 ///
 /// Transform the point given the x and y parameters, returning the transformed point as a
-/// [ktTransformResult]
-typedef PointTransformer = Offset Function(double x, double y);
+/// [Offset]
+typedef OffsetMover = Offset Function(double x, double y);
 
 /*
  * Copyright 2022 The Android Open Source Project

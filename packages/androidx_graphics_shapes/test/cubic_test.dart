@@ -121,13 +121,13 @@ void main() {
   group("transform", () {
     test("identity test", () {
       final transform = identityTransform;
-      final transformedCubic = cubic.ktTransformed(transform);
+      final transformedCubic = cubic.moved(transform);
       expect(cubic, cubic2DMoreOrLessEquals(transformedCubic));
     });
 
     test("scale test", () {
       final transform = scaleTransform(3, 3);
-      final transformedCubic = cubic.ktTransformed(transform);
+      final transformedCubic = cubic.moved(transform);
       expect(cubic * 3, cubic2DMoreOrLessEquals(transformedCubic));
     });
 
@@ -136,7 +136,7 @@ void main() {
       final ty = 300.0;
       final translationVector = Offset(tx, ty);
       final transform = translateTransform(tx, ty);
-      final transformedCubic = cubic.ktTransformed(transform);
+      final transformedCubic = cubic.moved(transform);
       expect(
         cubic.anchor0 + translationVector,
         offsetMoreOrLessEquals(transformedCubic.anchor0, epsilon: epsilon),

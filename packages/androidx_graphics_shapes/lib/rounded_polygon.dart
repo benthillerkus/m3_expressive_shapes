@@ -124,17 +124,17 @@ class RoundedPolygon {
     }
   }
 
-  /// Transforms (scales/translates/etc.) this [RoundedPolygon] with the given [PointTransformer]
+  /// Transforms (scales/translates/etc.) this [RoundedPolygon] with the given [OffsetMover]
   /// and returns a new [RoundedPolygon]. This is a low level API and there should be more platform
   /// idiomatic ways to transform a [RoundedPolygon] provided by the platform specific wrapper.
   ///
-  /// [f] The [PointTransformer] used to transform this [RoundedPolygon]
-  RoundedPolygon ktTransformed(PointTransformer f) {
-    final center = this.center.ktTransformed(f);
+  /// [f] The [OffsetMover] used to transform this [RoundedPolygon]
+  RoundedPolygon moved(OffsetMover f) {
+    final center = this.center.moved(f);
     final it = <Feature>[];
 
     for (int i = 0; i < features.length; i++) {
-      it.add(features[i].ktTransformed(f));
+      it.add(features[i].moved(f));
     }
 
     return RoundedPolygon._(it, center);
@@ -150,7 +150,7 @@ class RoundedPolygon {
     // Center the shape if bounds are not a square
     final offsetX = (side - width) / 2 - bounds.left;
     final offsetY = (side - height) / 2 - bounds.top;
-    return ktTransformed((x, y) => Offset((x + offsetX) / side, (y + offsetY) / side));
+    return moved((x, y) => Offset((x + offsetX) / side, (y + offsetY) / side));
   }
 
   @override
