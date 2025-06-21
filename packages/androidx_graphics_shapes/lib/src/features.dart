@@ -5,7 +5,7 @@
 
 import 'dart:core';
 
-import 'package:androidx_graphics_shapes/utils.dart';
+import 'package:androidx_graphics_shapes/src/utils.dart';
 import 'package:meta/meta.dart';
 
 import 'cubic.dart';

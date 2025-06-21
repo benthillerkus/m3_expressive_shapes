@@ -1,7 +1,7 @@
 // Ported from CornerRoundingTest.kt in https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:graphics/graphics-shapes/src/androidInstrumentedTest/kotlin/androidx/graphics/shapes/CornerRoundingTest.kt
 // See original license at the end of this file.
 
-import 'package:androidx_graphics_shapes/corner_rounding.dart';
+import 'package:androidx_graphics_shapes/src/corner_rounding.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

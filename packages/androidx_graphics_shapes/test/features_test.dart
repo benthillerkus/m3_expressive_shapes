@@ -1,8 +1,8 @@
 // Ported from FeaturesTest.kt in https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:graphics/graphics-shapes/src/androidInstrumentedTest/kotlin/androidx/graphics/shapes/FeaturesTest.kt
 // See original license at the end of this file.
 
-import 'package:androidx_graphics_shapes/cubic.dart';
-import 'package:androidx_graphics_shapes/features.dart';
+import 'package:androidx_graphics_shapes/src/cubic.dart';
+import 'package:androidx_graphics_shapes/src/features.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'utils.dart';

@@ -1,4 +1,4 @@
-import 'package:androidx_graphics_shapes/scan.dart';
+import 'package:androidx_graphics_shapes/src/scan.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

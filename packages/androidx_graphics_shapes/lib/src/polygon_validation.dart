@@ -1,7 +1,7 @@
 // Ported from PolygonValidation.kt in https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:graphics/graphics-shapes/src/commonMain/kotlin/androidx/graphics/shapes/PolygonValidation.kt
 // See original license at the end of this file.
 
-import 'package:androidx_graphics_shapes/rounded_polygon.dart';
+import 'package:androidx_graphics_shapes/src/rounded_polygon.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 

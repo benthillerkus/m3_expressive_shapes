@@ -3,9 +3,9 @@
 
 import 'dart:math';
 
-import 'package:androidx_graphics_shapes/cubic.dart';
-import 'package:androidx_graphics_shapes/features.dart';
-import 'package:androidx_graphics_shapes/rounded_polygon.dart';
+import 'package:androidx_graphics_shapes/src/cubic.dart';
+import 'package:androidx_graphics_shapes/src/features.dart';
+import 'package:androidx_graphics_shapes/src/rounded_polygon.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vector_math/vector_math_64.dart';

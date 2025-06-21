@@ -4,8 +4,8 @@
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:androidx_graphics_shapes/point.dart';
-import 'package:androidx_graphics_shapes/utils.dart';
+import 'package:androidx_graphics_shapes/src/point.dart';
+import 'package:androidx_graphics_shapes/src/utils.dart';
 import 'package:flutter/painting.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';

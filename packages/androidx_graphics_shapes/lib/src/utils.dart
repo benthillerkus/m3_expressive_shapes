@@ -4,8 +4,7 @@
 import 'dart:ui';
 
 import 'package:meta/meta.dart';
-import 'package:meta/meta_meta.dart';
-import 'dart:math';
+
 import 'point.dart';
 
 /// These epsilon values are used internally to determine when two points are the same, within some

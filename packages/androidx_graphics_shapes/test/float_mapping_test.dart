@@ -2,7 +2,7 @@
 // See original license at the end of this file.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:androidx_graphics_shapes/float_mapping.dart';
+import 'package:androidx_graphics_shapes/src/float_mapping.dart';
 
 import 'utils.dart';
 

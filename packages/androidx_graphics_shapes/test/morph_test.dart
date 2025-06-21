@@ -1,9 +1,9 @@
 // Ported from MorphTest.kt in https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:graphics/graphics-shapes/src/androidInstrumentedTest/kotlin/androidx/graphics/shapes/MorphTest.kt
 // See original license at the end of this file.
 
-import 'package:androidx_graphics_shapes/cubic.dart';
-import 'package:androidx_graphics_shapes/morph.dart';
-import 'package:androidx_graphics_shapes/rounded_polygon.dart';
+import 'package:androidx_graphics_shapes/src/cubic.dart';
+import 'package:androidx_graphics_shapes/src/morph.dart';
+import 'package:androidx_graphics_shapes/src/rounded_polygon.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'utils.dart';

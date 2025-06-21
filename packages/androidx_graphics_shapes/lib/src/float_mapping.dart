@@ -4,7 +4,7 @@
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:androidx_graphics_shapes/utils.dart';
+import 'package:androidx_graphics_shapes/src/utils.dart';
 import 'package:flutter/animation.dart';
 import 'package:meta/meta.dart';
 

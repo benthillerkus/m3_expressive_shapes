@@ -3,9 +3,9 @@
 
 import 'dart:ui';
 
-import 'package:androidx_graphics_shapes/corner_rounding.dart';
-import 'package:androidx_graphics_shapes/cubic.dart';
-import 'package:androidx_graphics_shapes/rounded_polygon.dart';
+import 'package:androidx_graphics_shapes/src/corner_rounding.dart';
+import 'package:androidx_graphics_shapes/src/cubic.dart';
+import 'package:androidx_graphics_shapes/src/rounded_polygon.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'utils.dart';

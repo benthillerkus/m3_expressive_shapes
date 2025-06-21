@@ -3,10 +3,10 @@
 
 import 'dart:typed_data';
 
-import 'package:androidx_graphics_shapes/corner_rounding.dart';
-import 'package:androidx_graphics_shapes/feature_mapping.dart';
-import 'package:androidx_graphics_shapes/polygon_measure.dart';
-import 'package:androidx_graphics_shapes/rounded_polygon.dart';
+import 'package:androidx_graphics_shapes/src/corner_rounding.dart';
+import 'package:androidx_graphics_shapes/src/feature_mapping.dart';
+import 'package:androidx_graphics_shapes/src/polygon_measure.dart';
+import 'package:androidx_graphics_shapes/src/rounded_polygon.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_test/flutter_test.dart';
 

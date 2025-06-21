@@ -4,7 +4,7 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:androidx_graphics_shapes/utils.dart';
+import 'package:androidx_graphics_shapes/src/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';

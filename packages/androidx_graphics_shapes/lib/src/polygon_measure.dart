@@ -20,7 +20,7 @@ import "utils.dart";
 class MeasuredPolygon extends DelegatingList<MeasuredCubic> {
   final Measurer _measurer;
   List<MeasuredCubic> get _cubics => this;
-  @visibleForTesting
+  @internal
   final List<ProgressableFeature> features;
 
   MeasuredPolygon._(

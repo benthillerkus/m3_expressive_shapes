@@ -2,7 +2,7 @@
 // See original license at the end of this file.
 import 'dart:ui';
 
-import 'package:androidx_graphics_shapes/cubic.dart';
+import 'package:androidx_graphics_shapes/src/cubic.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'utils.dart';
