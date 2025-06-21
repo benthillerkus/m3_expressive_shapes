@@ -1,10 +1,7 @@
 // Ported from Point.kt in https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:graphics/graphics-shapes/src/commonMain/kotlin/androidx/graphics/shapes/Point.kt
 // See original license at the end of this file.
 
-import 'dart:math';
 import 'dart:ui';
-
-import 'package:meta/meta.dart';
 
 import 'cubic.dart';
 
@@ -20,7 +17,7 @@ extension OffsetExt on Offset {
 
   Offset normalize() => this / distance;
 
-  Offset ktTransformed(ktPointTransformer f) {
+  Offset ktTransformed(PointTransformer f) {
     return f(dx, dy);
   }
 }

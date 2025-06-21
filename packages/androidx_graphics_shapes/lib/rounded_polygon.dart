@@ -128,8 +128,8 @@ class RoundedPolygon {
   /// and returns a new [RoundedPolygon]. This is a low level API and there should be more platform
   /// idiomatic ways to transform a [RoundedPolygon] provided by the platform specific wrapper.
   ///
-  /// [f] The [ktPointTransformer] used to transform this [RoundedPolygon]
-  RoundedPolygon ktTransformed(ktPointTransformer f) {
+  /// [f] The [PointTransformer] used to transform this [RoundedPolygon]
+  RoundedPolygon ktTransformed(PointTransformer f) {
     final center = this.center.ktTransformed(f);
     final it = <Feature>[];
 

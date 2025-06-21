@@ -96,11 +96,11 @@ abstract class Feature {
     return true;
   }
 
-  /// Transforms the points in this [Feature] with the given [ktPointTransformer] and returns a new
+  /// Transforms the points in this [Feature] with the given [PointTransformer] and returns a new
   /// [Feature]
   ///
-  /// @param f The [ktPointTransformer] used to transform this [Feature]
-  Feature ktTransformed(ktPointTransformer f);
+  /// @param f The [PointTransformer] used to transform this [Feature]
+  Feature ktTransformed(PointTransformer f);
 
   /// Returns a new [Feature] with the points that define the shape of this [Feature] in reversed
   /// order.
@@ -128,7 +128,7 @@ class Edge extends Feature {
   const Edge(super.cubics);
 
   @override
-  Edge ktTransformed(ktPointTransformer f) =>
+  Edge ktTransformed(PointTransformer f) =>
       Edge([for (final cubic in cubics) cubic.ktTransformed(f)]);
 
   @override
@@ -164,7 +164,7 @@ class Corner extends Feature {
 
   final bool convex;
   @override
-  Corner ktTransformed(ktPointTransformer f) {
+  Corner ktTransformed(PointTransformer f) {
     return Corner([for (final cubic in cubics) cubic.ktTransformed(f)], convex: convex);
   }
 

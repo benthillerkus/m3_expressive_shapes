@@ -313,11 +313,11 @@ final class Cubic2D extends Curve2D {
     anchor1Y,
   );
 
-  /// Transforms the points in this [Cubic] with the given [ktPointTransformer] and returns a new
+  /// Transforms the points in this [Cubic] with the given [PointTransformer] and returns a new
   /// [Cubic]
   ///
-  /// @param f The [ktPointTransformer] used to [ktTransform] this [Cubic]
-  Cubic2D ktTransformed(ktPointTransformer f) {
+  /// @param f The [PointTransformer] used to [ktTransform] this [Cubic]
+  Cubic2D ktTransformed(PointTransformer f) {
     return Cubic2D(
       anchor0X,
       anchor0Y,
@@ -412,7 +412,7 @@ final class Cubic2D extends Curve2D {
   @internal
   Cubic2D.empty(double x0, double y0) : this(x0, y0, x0, y0, x0, y0, x0, y0);
 
-  void ktTransformOnePoint(ktPointTransformer f, int ix) {
+  void ktTransformOnePoint(PointTransformer f, int ix) {
     switch (ix) {
       case 0:
         final r = f(anchor0X, anchor0Y);
@@ -439,7 +439,7 @@ final class Cubic2D extends Curve2D {
   /// [PointTransformer] [f].
   ///
   /// Not to be confused with [transform] which maps the parameter t to a point on the curve.
-  void ktTransform(ktPointTransformer f) {
+  void ktTransform(PointTransformer f) {
     final a = f(anchor0X, anchor0Y);
     final b = f(control0X, control0Y);
     final c = f(control1X, control1Y);
@@ -474,7 +474,7 @@ final class Cubic2D extends Curve2D {
 ///
 /// Transform the point given the x and y parameters, returning the transformed point as a
 /// [ktTransformResult]
-typedef ktPointTransformer = Offset Function(double x, double y);
+typedef PointTransformer = Offset Function(double x, double y);
 
 /*
  * Copyright 2022 The Android Open Source Project
