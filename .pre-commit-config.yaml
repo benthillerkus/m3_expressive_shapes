@@ -6,3 +6,8 @@ repos:
     entry: puro dart format .
     language: system
     files: \.(dart)$
+  - id: analyze
+    name: Analyze code
+    entry: puro dart analyze .
+    language: system
+    files: \.(dart)$
