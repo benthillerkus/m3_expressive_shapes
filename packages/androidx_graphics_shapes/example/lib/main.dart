@@ -18,8 +18,8 @@ class MainApp extends StatelessWidget {
         body: Center(
           child: TweenAnimationBuilder(
             tween: ShapeBorderTween(
-              begin: TriangleBorder(),
-              end: StarBorder(
+              begin: const TriangleBorder(),
+              end: const StarBorder(
                 side: BorderSide(width: 4, style: BorderStyle.solid, color: Colors.green),
               ),
             ),

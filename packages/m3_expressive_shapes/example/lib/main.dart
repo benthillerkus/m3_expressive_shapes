@@ -1,5 +1,6 @@
-import 'package:example/table.dart';
 import 'package:flutter/material.dart';
+
+import 'table.dart';
 
 void main() {
   runApp(const MainApp());
