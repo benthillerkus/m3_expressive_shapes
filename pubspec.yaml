@@ -1,4 +1,5 @@
 name: workspace
+publish_to: none
 
 environment:
   sdk: '^3.8.0'
@@ -7,3 +8,4 @@ workspace:
   - packages/m3_expressive_shapes
   - packages/m3_expressive_shapes/example
   - packages/androidx_graphics_shapes
+  - packages/androidx_graphics_shapes/example
